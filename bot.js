@@ -10,7 +10,8 @@ const client = new Client({
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.Guilds,
         GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildMessageReactions
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildVoiceStates
     ],
     partials: [
         Partials.Message,
@@ -58,6 +59,10 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 
 client.on(Events.MessageReactionRemove, async (reaction, user) => {
     commands['reaction'].call(this, client, reaction, user, false);
+})
+
+client.on(Events.VoiceStateUpdate, async (oldChannel, newCannel) => {
+    commands['voice'].call(this, client, oldChannel, newCannel);
 })
 
 const database = require('./db');
