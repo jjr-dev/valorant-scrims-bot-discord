@@ -12,5 +12,4 @@ const Schema = mongoose.Schema({
 })
 
 Schema.set('timestamps', true);
-
 module.exports = mongoose.model('ChannelMatch', Schema);
