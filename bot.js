@@ -26,6 +26,7 @@ let commands = {};
 
 client.on(Events.ClientReady, (c) => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
+    client.user.setActivity(`Criado por: @jjr.dev`);
 })
 
 const commandsPath = path.join(__dirname, 'src/commands');
