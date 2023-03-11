@@ -50,6 +50,14 @@ async function create(client, msg, args) {
             {
                 name: "Como participar",
                 value: "Reaja com ✅ a esta mensagem"
+            },
+            {
+                name: "Como sortear o mapa",
+                value: "Reaja com 🗺️ a esta mensagem"
+            },
+            {
+                name: "Como sortear os jogadores",
+                value: "Reaja com 🎲 a esta mensagem"
             }
         )
 
@@ -57,11 +65,9 @@ async function create(client, msg, args) {
         embeds: [embed2]
     });
 
-    m.react('✅').then(() => {
-        m.react('🎲').then(() => {
-            m.react('🗺️');
-        });
-    });
+    await m.react('✅');
+    await m.react('🗺️');
+    await m.react('🎲');
 }
 
 module.exports = create;
