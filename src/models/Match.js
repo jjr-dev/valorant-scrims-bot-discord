@@ -8,6 +8,13 @@ const Schema = mongoose.Schema({
     message_id: {
         type: String,
         required: true
+    },
+    player_limit: {
+        type: Number
+    },
+    creator_id: {
+        type: String,
+        required: true
     }
 })
 

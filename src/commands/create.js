@@ -3,7 +3,7 @@ const { EmbedBuilder } = require('discord.js');
 const MatchModel = require('../models/Match');
 
 async function create(client, msg, args) {
-    let [ type, date, hour ] = args;
+    let [ player_limit ] = args;
 
     const embed1 = new EmbedBuilder()
         .setColor("Random")
@@ -20,7 +20,9 @@ async function create(client, msg, args) {
 
     await MatchModel.create({
         message_id: m.id,
-        user_id: msg.author.id
+        creator_id: msg.author.id,
+        user_id: msg.author.id,
+        player_limit 
     });
 
     const embed2 = new EmbedBuilder()
@@ -34,22 +36,16 @@ async function create(client, msg, args) {
         .addFields(
             {
                 name: "Tipo",
-                value: type ? type : 'Indefinido',
-                inline: true
-            },
-            {
-                name: "Dia",
-                value: date ? date : 'Indefinido',
-                inline: true
-            },
-            {
-                name: "Horário",
-                value: hour ? hour : 'Indefinido',
+                value: player_limit ? `${player_limit}x${player_limit}` : 'Indefinido',
                 inline: true
             },
             {
                 name: "Como participar",
                 value: "Reaja com ✅ a esta mensagem"
+            },
+            {
+                name: "Como ver lista de jogadores",
+                value: "Reaja com 📃 a esta mensagem"
             },
             {
                 name: "Como sortear o mapa",
@@ -60,12 +56,16 @@ async function create(client, msg, args) {
                 value: "Reaja com 🎲 a esta mensagem"
             }
         )
+        .setFooter({
+            text: `⚠️ Apenas o criador da SCRIM pode sortear mapa ou jogadores`
+        })
 
     await m.edit({
         embeds: [embed2]
     });
 
     await m.react('✅');
+    await m.react('📃');
     await m.react('🗺️');
     await m.react('🎲');
 }

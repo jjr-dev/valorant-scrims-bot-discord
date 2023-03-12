@@ -40,17 +40,21 @@ async function play(client, reaction, user, add) {
 
     const ca = await guild.channels.create({
         name: "Equipe A",
-        type: ChannelType.GuildVoice
+        type: ChannelType.GuildVoice,
+        userLimit: match.player_limit ? match.player_limit : false
     });
 
     const cb = await guild.channels.create({
         name: "Equipe B",
-        type: ChannelType.GuildVoice
+        type: ChannelType.GuildVoice,
+        userLimit: match.player_limit ? match.player_limit : false
     });
 
     players.map(async (player) => {
         const member = guild.members.cache.get(player.user_id);
-        await member.voice.setChannel(player.attacker ? ca : cb);
+        
+        if(member.voice.channel)
+            await member.voice.setChannel(player.attacker ? ca : cb);
     })
 
     const channels = [ca, cb];

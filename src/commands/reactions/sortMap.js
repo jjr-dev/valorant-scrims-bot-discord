@@ -2,8 +2,7 @@ const { EmbedBuilder, userMention } = require('discord.js');
 
 async function sortMap(client, reaction, user, add) {
     const channel = client.channels.cache.get(reaction.message.channelId);
-    const dm      = client.users.cache.get(user.id);
-    
+
     if(!add)
         return;
 
@@ -57,7 +56,6 @@ async function sortMap(client, reaction, user, add) {
         });
     })
     .catch((err) => {
-        dm.send(`Ocorreu um erro ao sortear o mapa`);
         console.log(err);
     })
 }

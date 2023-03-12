@@ -7,7 +7,6 @@ const { EmbedBuilder, userMention } = require('discord.js');
 
 async function sortPlayers(client, reaction, user, add) {
     const channel = client.channels.cache.get(reaction.message.channelId);
-    const dm      = client.users.cache.get(user.id);
     
     if(!add)
         return;
@@ -34,7 +33,7 @@ async function sortPlayers(client, reaction, user, add) {
     });
 
     if(players.length < 2) {
-        dm.send(`É necessário ao menos 2 jogadores para sortear`);
+        m.delete();
         return;
     }
 
@@ -65,7 +64,6 @@ async function sortPlayers(client, reaction, user, add) {
     })
     
     if(!sort) {
-        dm.send("Erro ao sortear os jogadores");
         m.delete();
         return;
     }
