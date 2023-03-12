@@ -44,7 +44,7 @@ async function setmatches(client, msg, args) {
         matches_won
     })
 
-    const wrString = `${win_rate * 100}%`;
+    const wrString = `${(win_rate * 100).toFixed(2)}%`;
 
     const embed2 = new EmbedBuilder()
         .setColor("Random")

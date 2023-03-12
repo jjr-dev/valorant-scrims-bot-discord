@@ -167,7 +167,7 @@ async function sortPlayers(client, reaction, user, add) {
 
     const sidesNames = {
         attacker: `Atacantes (${(teams_win_rate['attacker'] * 100).toFixed(0)}%)`,
-        defender: `Atacantes (${(teams_win_rate['defender'] * 100).toFixed(0)}%)`
+        defender: `Defensores (${(teams_win_rate['defender'] * 100).toFixed(0)}%)`
     }
 
     const embed2 = new EmbedBuilder()

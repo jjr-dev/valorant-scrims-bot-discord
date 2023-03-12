@@ -26,7 +26,7 @@ async function getmatches(client, msg, args) {
         user_id
     });
 
-    const wrString = player ? `${player.win_rate * 100}%` : "Indefinido";
+    const wrString = player ? `${(player.win_rate * 100).toFixed(2)}%` : "Indefinido";
 
     const embed2 = new EmbedBuilder()
         .setColor("Random")
