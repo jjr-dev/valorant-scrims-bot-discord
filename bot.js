@@ -51,6 +51,9 @@ client.on(Events.MessageCreate, async (msg) => {
     const args    = msg.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
+    if(!commands[command])
+        return;
+
     commands[command].call(this, client, msg, args);
 })
 
