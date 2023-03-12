@@ -31,7 +31,7 @@ async function setmatches(client, msg, args) {
     }
 
     const user_id  = user.slice(0, -1).slice(2);
-    const win_rate = (matches / 100 * matches_won).toFixed(2);
+    const win_rate = (matches_won / matches).toFixed(2);
 
     await PlayerModel.deleteOne({
         user_id
