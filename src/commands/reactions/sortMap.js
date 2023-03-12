@@ -1,10 +1,12 @@
+const MatchModel = require('../../models/Match');
+
 const { EmbedBuilder, userMention } = require('discord.js');
 
 async function sortMap(client, reaction, user, add) {
-    const channel = client.channels.cache.get(reaction.message.channelId);
-
     if(!add)
         return;
+
+    const channel = client.channels.cache.get(reaction.message.channelId);
 
     const embed1 = new EmbedBuilder()
         .setColor("Random")
@@ -18,6 +20,15 @@ async function sortMap(client, reaction, user, add) {
     const m = await channel.send({
         embeds: [embed1]
     });
+
+    const match = await MatchModel.findOne({
+        message_id: reaction.message.id
+    })
+
+    if(match.creator_id != user.id) {
+        m.delete();
+        return;
+    }
 
     const url = 'https://valorant-api.com/v1/maps';
 
@@ -47,7 +58,7 @@ async function sortMap(client, reaction, user, add) {
                 iconURL: client.user.displayAvatarURL()
             })
             .setTitle('Mapa sorteado')
-            .setDescription(`O jogador ${userMention(user.id)} sorteou o mapa **${map.displayName}**`)
+            .setDescription(`O membro ${userMention(user.id)} sorteou o mapa **${map.displayName}**`)
             .setThumbnail(map.displayIcon)
             .setImage(map.splash)
 
@@ -56,6 +67,7 @@ async function sortMap(client, reaction, user, add) {
         });
     })
     .catch((err) => {
+        m.delete();
         console.log(err);
     })
 }

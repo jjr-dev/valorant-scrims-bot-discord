@@ -1,7 +1,8 @@
-const enter = require('./reactions/enter');
+const listPlayers = require('./reactions/listPlayers');
 const sortPlayers = require('./reactions/sortPlayers');
-const sortMap = require('./reactions/sortMap');
-const play = require('./reactions/play');
+const sortMap     = require('./reactions/sortMap');
+const play        = require('./reactions/play');
+const enter       = require('./reactions/enter');
 
 async function reaction(client, reaction, user, add) {
     if(user.bot)
@@ -12,6 +13,9 @@ async function reaction(client, reaction, user, add) {
     switch(emoji) {
         case "✅":
             enter(client, reaction, user, add);
+            break;
+        case "📃":
+            listPlayers(client, reaction, user, add);
             break;
         case "🎲":
             sortPlayers(client, reaction, user, add);

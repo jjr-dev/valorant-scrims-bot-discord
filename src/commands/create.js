@@ -2,6 +2,8 @@ const { EmbedBuilder } = require('discord.js');
 
 const MatchModel = require('../models/Match');
 
+const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
+
 async function create(client, msg, args) {
     let [ player_limit ] = args;
 
@@ -32,11 +34,11 @@ async function create(client, msg, args) {
             iconURL: client.user.displayAvatarURL()
         })
         .setTitle('SCRIM agendada')
-        .setDescription(`O jogador ${msg.author} deseja criar uma **SCRIM**`)
+        .setDescription(`O membro ${msg.author} deseja criar uma **SCRIM** ${EmbedWhiteSpace()}`)
         .addFields(
             {
                 name: "Tipo",
-                value: player_limit ? `${player_limit}x${player_limit}` : 'Indefinido',
+                value: (player_limit ? `${player_limit}x${player_limit}` : 'Indefinido') + EmbedWhiteSpace(),
                 inline: true
             },
             {
@@ -53,7 +55,7 @@ async function create(client, msg, args) {
             },
             {
                 name: "Como sortear os jogadores",
-                value: "Reaja com 🎲 a esta mensagem"
+                value: `Reaja com 🎲 a esta mensagem ${EmbedWhiteSpace()}`
             }
         )
         .setFooter({

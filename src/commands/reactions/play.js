@@ -6,10 +6,10 @@ const ChannelMatchModel = require('../../models/ChannelMatch');
 const { EmbedBuilder, ChannelType } = require('discord.js');
 
 async function play(client, reaction, user, add) {
-    const channel = client.channels.cache.get(reaction.message.channelId);
-    
     if(!add)
         return;
+
+    const channel = client.channels.cache.get(reaction.message.channelId);
 
     const embed1 = new EmbedBuilder()
         .setColor("Random")
@@ -31,6 +31,11 @@ async function play(client, reaction, user, add) {
     const match = await MatchModel.findOne({
         _id: sort.match_id
     });
+
+    if(match.creator_id != user.id) {
+        m.delete();
+        return;
+    }
 
     const players = await PlayerSortMatchModel.find({
         sort_id: sort._id

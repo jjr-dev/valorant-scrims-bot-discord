@@ -1,15 +1,17 @@
+const { EmbedBuilder, userMention } = require('discord.js');
+
 const MatchModel = require('../../models/Match');
 const PlayerMatchModel = require('../../models/PlayerMatch');
 const PlayerSortMatchModel = require('../../models/PlayerSortMatch');
 const SortMatchModel = require('../../models/SortMatch');
 
-const { EmbedBuilder, userMention } = require('discord.js');
+const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
 
 async function sortPlayers(client, reaction, user, add) {
-    const channel = client.channels.cache.get(reaction.message.channelId);
-    
     if(!add)
         return;
+
+    const channel = client.channels.cache.get(reaction.message.channelId);
 
     const embed1 = new EmbedBuilder()
         .setColor("Random")
@@ -27,6 +29,11 @@ async function sortPlayers(client, reaction, user, add) {
     const match = await MatchModel.findOne({
         message_id: reaction.message.id
     })
+
+    if(match.creator_id != user.id) {
+        m.delete();
+        return;
+    }
 
     let players = await PlayerMatchModel.find({
         match_id: match._id
@@ -87,7 +94,7 @@ async function sortPlayers(client, reaction, user, add) {
             iconURL: client.user.displayAvatarURL()
         })
         .setTitle('Sorteio de jogadores')
-        .setDescription(`O jogador ${userMention(user.id)} sorteou os jogadores`)
+        .setDescription(`O membro ${userMention(user.id)} sorteou os jogadores ${EmbedWhiteSpace()}`)
         .addFields(
             {
                 name: "Atacantes",
