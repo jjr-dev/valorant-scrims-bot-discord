@@ -70,6 +70,8 @@ async function create(client, msg, args) {
     await m.react('📃');
     await m.react('🗺️');
     await m.react('🎲');
+
+    msg.delete();
 }
 
 module.exports = create;

@@ -58,7 +58,12 @@ async function sortPlayers(client, reaction, user, add) {
 
     const players_win_rate = {};
     win_rates.map((player) => {
-        players_win_rate[player.user_id] = player.win_rate ? player.win_rate : 0.5;
+        players_win_rate[player.user_id] = player.win_rate;
+    })
+
+    players.map((player) => {
+        if(!players_win_rate[player.user_id])
+            players_win_rate[player.user_id] = 0.5;
     })
 
     const limit = 10;
@@ -133,6 +138,29 @@ async function sortPlayers(client, reaction, user, add) {
         teams_win_rate = best_sort.teams_win_rate;
     }
 
+    const sorts = await SortMatchModel.find({
+        match_id: match._id
+    })
+
+    sorts.map(async (sort) => {
+        channel.messages.fetch(sort.message_id)
+            .then((message) => {
+                message.delete();
+            })
+            .catch((err) => {
+                if (err.status !== 404)
+                    console.log(err);
+            })
+
+        await PlayerSortMatchModel.deleteMany({
+            sort_id: sort._id
+        })
+    })
+
+    await SortMatchModel.deleteMany({
+        match_id: match._id
+    })
+
     await SortMatchModel.create({
         match_id: match._id,
         message_id: m.id
@@ -148,9 +176,27 @@ async function sortPlayers(client, reaction, user, add) {
     for(let type in teams) {
         const team = teams[type];
 
+        let max = {
+            win_rate: 0,
+            index: null
+        };
+
         team.map((player, index) => {
-            teams[type][index]['sort_id'] = sort._id;
+            const win_rate = players_win_rate[player.user_id];
+
+            teams[type][index]['sort_id']  = sort._id;
+            teams[type][index]['captain']  = false;
+            teams[type][index]['win_rate'] = win_rate;
+
+            if(win_rate > max.win_rate) {
+                max = {
+                    win_rate: win_rate,
+                    index: index
+                };
+            }
         })
+
+        teams[type][max.index]['captain'] = true;
     }
 
     let mentions = {};
@@ -161,7 +207,7 @@ async function sortPlayers(client, reaction, user, add) {
 
         mentions[key] = [];
         team.map((player) => {
-            mentions[key].push(`${userMention(player.user_id)} (${(players_win_rate[player.user_id] * 100).toFixed(0)}%)`);
+            mentions[key].push(`${userMention(player.user_id)} (${(player.win_rate * 100).toFixed(0)}%) ${player.captain ? "🎖️" : ""}`);
         })
     }
 
@@ -181,15 +227,18 @@ async function sortPlayers(client, reaction, user, add) {
         .addFields(
             {
                 name: sidesNames.attacker,
-                value: mentions.attacker.join("\n"),
+                value: mentions.attacker.join("\n") + EmbedWhiteSpace(),
                 inline: true
             },
             {
                 name: sidesNames.defender,
-                value: mentions.defender.join("\n"),
+                value: mentions.defender.join("\n") + EmbedWhiteSpace(),
                 inline: true
             }
         )
+        .setFooter({
+            text: `O símbolo 🎖️ representa o capitão de cada time`
+        })
 
     await m.edit({
         embeds: [embed2]

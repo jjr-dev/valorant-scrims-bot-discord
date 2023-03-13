@@ -1,24 +1,20 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema({
-    attacker: {
-        type: Boolean,
-        required: true
-    },
-    sort_id: {
+    match_id: {
         type: String,
         required: true
     },
-    user_id: { 
+    message_id: {
         type: String,
         required: true
     },
-    captain: {
-        type: Boolean,
+    name: {
+        type: String,
         required: true
     }
 })
 
 Schema.set('timestamps', true);
 
-module.exports = mongoose.model('PlayerSortMatch', Schema);
+module.exports = mongoose.model('MapSortMatch', Schema);

@@ -1,9 +1,12 @@
+const { EmbedBuilder, ChannelType, userMention } = require('discord.js');
+
 const MatchModel = require('../../models/Match');
 const PlayerSortMatchModel = require('../../models/PlayerSortMatch');
 const SortMatchModel = require('../../models/SortMatch');
 const ChannelMatchModel = require('../../models/ChannelMatch');
+const MapSortMatchModel = require('../../models/MapSortMatch');
 
-const { EmbedBuilder, ChannelType } = require('discord.js');
+const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
 
 async function play(client, reaction, user, add) {
     if(!add)
@@ -17,7 +20,7 @@ async function play(client, reaction, user, add) {
             name: client.user.username,
             iconURL: client.user.displayAvatarURL()
         })
-        .setTitle('Separando jogadores')
+        .setTitle('Iniciando partida')
         .setDescription("`Por favor, aguarde...`")
 
     const m = await channel.send({
@@ -55,11 +58,18 @@ async function play(client, reaction, user, add) {
         userLimit: match.player_limit ? match.player_limit : false
     });
 
+    const teams = {
+        'attacker': [],
+        'defender': []
+    }
+
     players.map(async (player) => {
         const member = guild.members.cache.get(player.user_id);
-        
-        if(member.voice.channel)
+
+        if(member && member.voice.channel)
             await member.voice.setChannel(player.attacker ? ca : cb);
+
+        teams[player.attacker ? 'attacker' : 'defender'].push(player);
     })
 
     const channels = [ca, cb];
@@ -70,11 +80,63 @@ async function play(client, reaction, user, add) {
         })
     })
 
-    m.delete();
+    const map = await MapSortMatchModel.findOne({
+        match_id: match._id,
+    });
+
     reaction.message.delete();
 
-    client.channels.cache.get(reaction.message.channelId).messages.fetch(match.message_id).then((msg) => {
-        msg.delete();
+    client.channels.cache.get(reaction.message.channelId).messages.fetch(match.message_id)
+        .then((msg) => {
+            msg.delete();
+        })
+        .catch((err) => {
+            if (err.status !== 404)
+                console.log(err);
+        })
+
+    let mentions = {};
+    for(let key in teams) {
+        const team = teams[key];
+
+        await PlayerSortMatchModel.create(team);
+
+        mentions[key] = [];
+        team.map((player) => {
+            mentions[key].push(`${userMention(player.user_id)} ${player.captain ? "🎖️" : ""}`);
+        })
+    }
+    
+    const embed2 = new EmbedBuilder()
+        .setColor("Random")
+        .setAuthor({
+            name: client.user.username,
+            iconURL: client.user.displayAvatarURL()
+        })
+        .setTitle('Partida iniciada')
+        .setDescription(`O membro ${userMention(user.id)} iniciou a partida ${EmbedWhiteSpace()}`)
+        .addFields(
+            {
+                name: "Mapa",
+                value: `${map.name} ${EmbedWhiteSpace()}`
+            },
+            {
+                name: "Atacantes",
+                value: mentions.attacker.join("\n") + EmbedWhiteSpace(),
+                inline: true
+            },
+            {
+                name: "Defensores",
+                value: mentions.defender.join("\n") + EmbedWhiteSpace(),
+                inline: true
+            }
+        )
+        .setFooter({
+            text: `ID da partida: ${match._id}`
+        })
+
+    await m.edit({
+        embeds: [embed2]
     })
 }
 
