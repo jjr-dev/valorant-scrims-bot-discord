@@ -3,6 +3,7 @@ const sortPlayers = require('./reactions/sortPlayers');
 const sortMap     = require('./reactions/sortMap');
 const play        = require('./reactions/play');
 const enter       = require('./reactions/enter');
+const resultMatch = require('./reactions/resultMatch');
 
 async function reaction(client, reaction, user, add) {
     if(user.bot)
@@ -25,6 +26,12 @@ async function reaction(client, reaction, user, add) {
             break;
         case "▶️":
             play(client, reaction, user, add);
+            break;
+        case "🅰️":
+            resultMatch(true, client, reaction, user, add);
+            break;
+        case "🅱️":
+            resultMatch(false, client, reaction, user, add);
             break;
     }
 }

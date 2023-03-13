@@ -66,8 +66,8 @@ async function sortPlayers(client, reaction, user, add) {
             players_win_rate[player.user_id] = 0.5;
     })
 
-    const limit = 10;
-    const range = 0.15;
+    const limit = 15;
+    const range = 0.10;
 
     let difference;
     let teams;

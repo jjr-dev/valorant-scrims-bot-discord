@@ -5,7 +5,7 @@ const PlayerModel = require('../models/Player');
 const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
 
 async function setmatches(client, msg, args) {
-    const [ user, matches, matches_won ] = args;
+    const [ user, matches_won, matches ] = args;
 
     const embed1 = new EmbedBuilder()
         .setColor("Random")
@@ -44,7 +44,7 @@ async function setmatches(client, msg, args) {
         matches_won
     })
 
-    const wrString = `${(win_rate * 100).toFixed(2)}%`;
+    const wrString = `${(win_rate * 100).toFixed(0)}%`;
 
     const embed2 = new EmbedBuilder()
         .setColor("Random")

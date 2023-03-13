@@ -63,14 +63,18 @@ async function play(client, reaction, user, add) {
         'defender': []
     }
 
-    players.map(async (player) => {
-        const member = guild.members.cache.get(player.user_id);
+    for(let prop in players) {
+        const player = players[prop];
+
+        const member = await guild.members.cache.get(player.user_id);
 
         if(member && member.voice.channel)
             await member.voice.setChannel(player.attacker ? ca : cb);
+        
+        console.log(player);
 
         teams[player.attacker ? 'attacker' : 'defender'].push(player);
-    })
+    }
 
     const channels = [ca, cb];
     channels.forEach(async (channel) => {
@@ -106,6 +110,12 @@ async function play(client, reaction, user, add) {
             mentions[key].push(`${userMention(player.user_id)} ${player.captain ? "🎖️" : ""}`);
         })
     }
+
+    await MatchModel.findOneAndUpdate({
+        _id: match._id,
+    }, {
+        result_id: m.id
+    });
     
     const embed2 = new EmbedBuilder()
         .setColor("Random")
@@ -118,7 +128,7 @@ async function play(client, reaction, user, add) {
         .addFields(
             {
                 name: "Mapa",
-                value: `${map.name} ${EmbedWhiteSpace()}`
+                value: `${map ? map.name : "Indefinido"} ${EmbedWhiteSpace()}`
             },
             {
                 name: "Atacantes",
@@ -138,6 +148,9 @@ async function play(client, reaction, user, add) {
     await m.edit({
         embeds: [embed2]
     })
+    
+    await m.react("🅰️");
+    await m.react("🅱️");
 }
 
 module.exports = play;

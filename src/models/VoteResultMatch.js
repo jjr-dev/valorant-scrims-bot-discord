@@ -1,26 +1,20 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema({
+    match_id: {
+        type: String,
+        required: true
+    },
     user_id: {
         type: String,
         required: true
     },
-    message_id: {
-        type: String,
+    attacker: {
+        type: Boolean,
         required: true
-    },
-    player_limit: {
-        type: Number
-    },
-    creator_id: {
-        type: String,
-        required: true
-    },
-    result_id: {
-        type: String
     }
 })
 
 Schema.set('timestamps', true);
 
-module.exports = mongoose.model('Match', Schema);
+module.exports = mongoose.model('VoteResultMatch', Schema);
