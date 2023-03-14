@@ -1,7 +1,9 @@
+const { EmbedBuilder, userMention } = require('discord.js');
+
 const MatchModel = require('../../models/Match');
 const MapSortMatchModel = require('../../models/MapSortMatch');
 
-const { EmbedBuilder, userMention } = require('discord.js');
+const SortMap = require('../../helpers/SortMap');
 
 async function sortMap(client, reaction, user, add) {
     if(!add)
@@ -50,52 +52,32 @@ async function sortMap(client, reaction, user, add) {
         match_id: match._id
     })
 
-    const url = 'https://valorant-api.com/v1/maps';
+    try {
+        const map = await SortMap();
 
-    fetch(url)
-        .then(async (res) => {
-            res = await res.json();
-
-            if(res.status !== 200)
-                throw "Error status code";
-
-            const maps = res.data;
-
-            maps.map((map, index) => {
-                if(!map.callouts)
-                    maps.splice(index, 1);
+        const embed2 = new EmbedBuilder()
+            .setColor("Random")
+            .setAuthor({
+                name: client.user.username,
+                iconURL: client.user.displayAvatarURL()
             })
+            .setTitle('Mapa sorteado')
+            .setDescription(`O membro ${userMention(user.id)} sorteou o mapa **${map.displayName}**`)
+            .setThumbnail(map.displayIcon)
+            .setImage(map.splash)
 
-            maps.sort();
+        await m.edit({
+            embeds: [embed2]
+        });
 
-            const random = Math.floor(Math.random() * maps.length);
-            const map = maps[random];
-
-            const embed2 = new EmbedBuilder()
-                .setColor("Random")
-                .setAuthor({
-                    name: client.user.username,
-                    iconURL: client.user.displayAvatarURL()
-                })
-                .setTitle('Mapa sorteado')
-                .setDescription(`O membro ${userMention(user.id)} sorteou o mapa **${map.displayName}**`)
-                .setThumbnail(map.displayIcon)
-                .setImage(map.splash)
-
-            await m.edit({
-                embeds: [embed2]
-            });
-
-            await MapSortMatchModel.create({
-                match_id: match._id,
-                message_id: m.id,
-                name: map.displayName
-            })
+        await MapSortMatchModel.create({
+            match_id: match._id,
+            message_id: m.id,
+            name: map.displayName
         })
-        .catch((err) => {
-            m.delete();
-            console.log(err);
-        })
+    } catch(err) {
+        m.delete();
+    }
 }
 
 module.exports = sortMap;

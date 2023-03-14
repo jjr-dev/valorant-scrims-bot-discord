@@ -4,7 +4,7 @@ const PlayerModel = require('../models/Player');
 
 const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
 
-async function getmatches(client, msg, args) {
+async function matches(client, msg, args) {
     const [ user ] = args;
 
     const embed1 = new EmbedBuilder()
@@ -59,4 +59,4 @@ async function getmatches(client, msg, args) {
     });
 }
 
-module.exports = getmatches;
+module.exports = matches;
