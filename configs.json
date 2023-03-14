@@ -1,0 +1,7 @@
+{
+    "prefix": "!!",
+    "token": "your-token-id",
+    "dbUser": "your-db-user",
+    "dbPass": "your-db-pass",
+    "version": "0.1"
+}
