@@ -7,6 +7,7 @@ const ChannelMatchModel = require('../../models/ChannelMatch');
 const MapSortMatchModel = require('../../models/MapSortMatch');
 
 const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
+const DeleteMessage = require('../../helpers/DeleteMessage');
 
 async function play(client, reaction, user, add) {
     if(!add)
@@ -36,7 +37,7 @@ async function play(client, reaction, user, add) {
     });
 
     if(!match || match.creator_id != user.id) {
-        m.delete();
+        DeleteMessage(client, m);
         return;
     }
 
@@ -71,8 +72,6 @@ async function play(client, reaction, user, add) {
         if(member && member.voice.channel)
             await member.voice.setChannel(player.attacker ? ca : cb);
         
-        console.log(player);
-
         teams[player.attacker ? 'attacker' : 'defender'].push(player);
     }
 
@@ -88,16 +87,8 @@ async function play(client, reaction, user, add) {
         match_id: match._id,
     });
 
-    reaction.message.delete();
-
-    client.channels.cache.get(reaction.message.channelId).messages.fetch(match.message_id)
-        .then((msg) => {
-            msg.delete();
-        })
-        .catch((err) => {
-            if (err.status !== 404)
-                console.log(err);
-        })
+    DeleteMessage(client, reaction.message);
+    DeleteMessage(client, match.message_id, reaction.message.channel);
 
     let mentions = {};
     for(let key in teams) {
@@ -131,14 +122,24 @@ async function play(client, reaction, user, add) {
                 value: `${map ? map.name : "Indefinido"} ${EmbedWhiteSpace()}`
             },
             {
-                name: "Atacantes",
+                name: "🅰️ - Atacantes",
                 value: mentions.attacker.join("\n") + EmbedWhiteSpace(),
                 inline: true
             },
             {
-                name: "Defensores",
+                name: "🅱️ - Defensores",
                 value: mentions.defender.join("\n") + EmbedWhiteSpace(),
                 inline: true
+            },
+            {
+                name: "Como registrar o resultado",
+                value: `
+                    Vote em 🅰️ ou 🅱️ para registrar o resultado da partida. 
+                    
+                    **Avisos:**
+                    • Apenas os capitães (🎖️) podem registrar o resultado
+                    • O resultado é registrado apenas quando ambos votarem
+                `
             }
         )
         .setFooter({

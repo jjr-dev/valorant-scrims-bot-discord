@@ -7,6 +7,7 @@ const SortMatchModel = require('../../models/SortMatch');
 const PlayerModel = require('../../models/Player');
 
 const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
+const DeleteMessage = require('../../helpers/DeleteMessage');
 
 async function resultMatch(attacker, client, reaction, user, add) {
     const channel = client.channels.cache.get(reaction.message.channelId);
@@ -32,7 +33,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
     })
 
     if(!match) {
-        if(m) m.delete();
+        if(m) DeleteMessage(client, m);
         return;
     }
 
@@ -52,7 +53,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
     })
 
     if(!verify) {
-        if(m) m.delete();
+        if(m) DeleteMessage(client, m);
         return;
     }
     
@@ -62,7 +63,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
     });
 
     if(!add) {
-        if(m) m.delete();
+        if(m) DeleteMessage(client, m);
         return;
     }
 
@@ -77,7 +78,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
     })
 
     if(votes.length < 2) {
-        if(m) m.delete();
+        if(m) DeleteMessage(client, m);
         return;
     }
 
@@ -94,7 +95,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
     })
 
     if(!verify) {
-        if(m) m.delete();
+        if(m) DeleteMessage(client, m);
         return;
     }
 
@@ -159,7 +160,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
         embeds: [embed2]
     });
 
-    reaction.message.delete();
+    DeleteMessage(client, reaction.message);
 }
 
 module.exports = resultMatch;

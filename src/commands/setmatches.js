@@ -3,6 +3,7 @@ const { EmbedBuilder, userMention } = require('discord.js');
 const PlayerModel = require('../models/Player');
 
 const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
+const DeleteMessage = require('../helpers/DeleteMessage');
 
 async function setmatches(client, msg, args) {
     const [ user, matches_won, matches ] = args;
@@ -21,12 +22,12 @@ async function setmatches(client, msg, args) {
     });
 
     if(!msg.member.roles.cache.has("1084548547212484838")) {
-        m.delete();
+        DeleteMessage(client, m);
         return;
     }
 
     if(!user || !user.includes("<@") || !user.includes(">") || !matches || isNaN(matches) || !matches_won || isNaN(matches_won)) {
-        m.delete();
+        DeleteMessage(client, m);
         return;
     }
 
@@ -76,7 +77,7 @@ async function setmatches(client, msg, args) {
         embeds: [embed2]
     });
 
-    msg.delete();
+    DeleteMessage(client, msg);
 }
 
 module.exports = setmatches;

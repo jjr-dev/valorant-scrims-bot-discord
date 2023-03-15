@@ -1,6 +1,7 @@
 const { EmbedBuilder } = require('discord.js');
 
 const SortMap = require('../helpers/SortMap');
+const DeleteMessage = require('../helpers/DeleteMessage');
 
 async function sortmap(client, msg, args) {
     const embed1 = new EmbedBuilder()
@@ -34,7 +35,7 @@ async function sortmap(client, msg, args) {
             embeds: [embed2]
         });
     } catch(err) {
-        m.delete();
+        DeleteMessage(client, m);
     }
 }
 

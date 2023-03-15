@@ -4,6 +4,7 @@ const MatchModel = require('../../models/Match');
 const MapSortMatchModel = require('../../models/MapSortMatch');
 
 const SortMap = require('../../helpers/SortMap');
+const DeleteMessage = require('../../helpers/DeleteMessage');
 
 async function sortMap(client, reaction, user, add) {
     if(!add)
@@ -29,7 +30,7 @@ async function sortMap(client, reaction, user, add) {
     })
 
     if(!match || match.creator_id != user.id) {
-        m.delete();
+        DeleteMessage(client, m);
         return;
     }
 
@@ -38,14 +39,7 @@ async function sortMap(client, reaction, user, add) {
     })
 
     sorts.map(async (sort) => {
-        channel.messages.fetch(sort.message_id)
-            .then((message) => {
-                message.delete();
-            })
-            .catch((err) => {
-                if (err.status !== 404)
-                    console.log(err);
-            })
+        DeleteMessage(client, sort.message_id, channel);
     })
 
     await MapSortMatchModel.deleteMany({
@@ -76,7 +70,7 @@ async function sortMap(client, reaction, user, add) {
             name: map.displayName
         })
     } catch(err) {
-        m.delete();
+        DeleteMessage(client, m);
     }
 }
 
