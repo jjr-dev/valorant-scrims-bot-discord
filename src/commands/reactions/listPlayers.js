@@ -4,6 +4,7 @@ const MatchModel = require('../../models/Match');
 const PlayerMatchModel = require('../../models/PlayerMatch');
 
 const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
+const DeleteMessage = require('../../helpers/DeleteMessage');
 
 async function listPlayers(client, reaction, user, add) {
     if(!add)
@@ -29,7 +30,7 @@ async function listPlayers(client, reaction, user, add) {
     })
 
     if(!match) {
-        m.delete();
+        DeleteMessage(client, m);
         return;
     }
 

@@ -3,6 +3,7 @@ const { EmbedBuilder } = require('discord.js');
 const MatchModel = require('../models/Match');
 
 const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
+const DeleteMessage = require('../helpers/DeleteMessage');
 
 async function create(client, msg, args) {
     let [ player_limit ] = args;
@@ -71,7 +72,7 @@ async function create(client, msg, args) {
     await m.react('🗺️');
     await m.react('🎲');
 
-    msg.delete();
+    DeleteMessage(client, msg)
 }
 
 module.exports = create;

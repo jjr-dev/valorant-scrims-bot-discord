@@ -3,6 +3,7 @@ const { EmbedBuilder } = require('discord.js');
 const { prefix } = require('../../configs.json');
 
 const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
+const DeleteMessage = require('../helpers/DeleteMessage');
 
 async function help(client, msg, args) {
     const embed1 = new EmbedBuilder()
@@ -72,7 +73,7 @@ async function help(client, msg, args) {
         embeds: [embed2]
     });
 
-    msg.delete();
+    DeleteMessage(client, msg);
 }
 
 module.exports = help;

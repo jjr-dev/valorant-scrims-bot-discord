@@ -7,6 +7,7 @@ const SortMatchModel = require('../../models/SortMatch');
 const PlayerModel = require('../../models/Player');
 
 const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
+const DeleteMessage = require('../../helpers/DeleteMessage');
 
 async function sortPlayers(client, reaction, user, add) {
     if(!add)
@@ -32,7 +33,7 @@ async function sortPlayers(client, reaction, user, add) {
     })
 
     if(!match || match.creator_id != user.id) {
-        m.delete();
+        DeleteMessage(client, m);
         return;
     }
 
@@ -41,7 +42,7 @@ async function sortPlayers(client, reaction, user, add) {
     });
 
     if(players.length < 2) {
-        m.delete();
+        DeleteMessage(client, m);
         return;
     }
 
@@ -143,14 +144,7 @@ async function sortPlayers(client, reaction, user, add) {
     })
 
     sorts.map(async (sort) => {
-        channel.messages.fetch(sort.message_id)
-            .then((message) => {
-                message.delete();
-            })
-            .catch((err) => {
-                if (err.status !== 404)
-                    console.log(err);
-            })
+        DeleteMessage(client, sort.message_id, channel);
 
         await PlayerSortMatchModel.deleteMany({
             sort_id: sort._id
@@ -169,7 +163,7 @@ async function sortPlayers(client, reaction, user, add) {
     const sort = await SortMatchModel.findOne().sort({_id: -1});
     
     if(!sort) {
-        m.delete();
+        DeleteMessage(client, m);
         return;
     }
 

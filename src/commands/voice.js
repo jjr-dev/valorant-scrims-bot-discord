@@ -10,8 +10,15 @@ async function voice(client, oldChannel, newCannel) {
                 channel_id: channel.id
             })
 
-            if(verify)
-                channel.delete();
+            if(verify) {
+                channel.fetch()
+                    .then((c) => {
+                        c.delete();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+            }
         }
     }
    

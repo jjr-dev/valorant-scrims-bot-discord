@@ -3,6 +3,7 @@ const { EmbedBuilder, userMention } = require('discord.js');
 const PlayerModel = require('../models/Player');
 
 const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
+const DeleteMessage = require('../helpers/DeleteMessage');
 
 async function listmatches(client, msg, args) {
     let [ page, limit, order ] = args;
@@ -30,7 +31,7 @@ async function listmatches(client, msg, args) {
         order = 'desc';
     
     if(isNaN(page) || isNaN(limit) || (order != 'desc' && order != 'asc')) {
-        m.delete();
+        DeleteMessage(client, m);
         return;
     }
 
@@ -44,7 +45,7 @@ async function listmatches(client, msg, args) {
     })
 
     if(players.length == 0) {
-        m.delete();
+        DeleteMessage(client, m);
         return;
     }
 
@@ -68,7 +69,7 @@ async function listmatches(client, msg, args) {
         embeds: [embed2]
     })
 
-    msg.delete();
+    DeleteMessage(client, msg);
 }
 
 module.exports = listmatches;

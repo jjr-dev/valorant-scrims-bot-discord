@@ -1,5 +1,7 @@
 const { EmbedBuilder } = require('discord.js');
 
+const DeleteMessage = require('../helpers/DeleteMessage');
+
 async function ping(client, msg) {
     const m = await msg.channel.send("Ping?");
 
@@ -12,7 +14,8 @@ async function ping(client, msg) {
         .setTitle('🏓 Pong!')
         .setDescription(`Olá ${msg.author}, seu ping está em \`${client.ws.ping}ms\`.`)
 
-    m.delete();
+    DeleteMessage(client, m);
+    
     msg.channel.send({
         embeds: [embed]
     });
