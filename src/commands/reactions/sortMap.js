@@ -28,7 +28,7 @@ async function sortMap(client, reaction, user, add) {
         message_id: reaction.message.id
     })
 
-    if(match.creator_id != user.id) {
+    if(!match || match.creator_id != user.id) {
         m.delete();
         return;
     }

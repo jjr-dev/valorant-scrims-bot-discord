@@ -28,6 +28,11 @@ async function listPlayers(client, reaction, user, add) {
         message_id: reaction.message.id
     })
 
+    if(!match) {
+        m.delete();
+        return;
+    }
+
     const players = await PlayerMatchModel.find({
         match_id: match._id
     });

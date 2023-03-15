@@ -35,7 +35,7 @@ async function play(client, reaction, user, add) {
         _id: sort.match_id
     });
 
-    if(match.creator_id != user.id) {
+    if(!match || match.creator_id != user.id) {
         m.delete();
         return;
     }
