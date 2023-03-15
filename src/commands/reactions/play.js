@@ -72,8 +72,6 @@ async function play(client, reaction, user, add) {
         if(member && member.voice.channel)
             await member.voice.setChannel(player.attacker ? ca : cb);
         
-        console.log(player);
-
         teams[player.attacker ? 'attacker' : 'defender'].push(player);
     }
 
@@ -124,14 +122,24 @@ async function play(client, reaction, user, add) {
                 value: `${map ? map.name : "Indefinido"} ${EmbedWhiteSpace()}`
             },
             {
-                name: "Atacantes",
+                name: "🅰️ - Atacantes",
                 value: mentions.attacker.join("\n") + EmbedWhiteSpace(),
                 inline: true
             },
             {
-                name: "Defensores",
+                name: "🅱️ - Defensores",
                 value: mentions.defender.join("\n") + EmbedWhiteSpace(),
                 inline: true
+            },
+            {
+                name: "Como registrar o resultado",
+                value: `
+                    Vote em 🅰️ ou 🅱️ para registrar o resultado da partida. 
+                    
+                    **Avisos:**
+                    • Apenas os capitães (🎖️) podem registrar o resultado
+                    • O resultado é registrado apenas quando ambos votarem
+                `
             }
         )
         .setFooter({
