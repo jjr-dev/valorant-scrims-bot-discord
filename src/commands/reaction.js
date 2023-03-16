@@ -11,6 +11,18 @@ async function reaction(client, reaction, user, add) {
 
     const emoji = reaction._emoji.name || reaction._emoji.id;
 
+    let isBotMsg = false;
+    await reaction.message.channel.messages.fetch(reaction.message.id)
+        .then((msg) => {
+            const author = msg.author;
+
+            if(author.id === '1083819033247358987')
+                isBotMsg = true;
+        });
+
+    if(!isBotMsg)
+        return;
+
     switch(emoji) {
         case "✅":
             enter(client, reaction, user, add);
@@ -32,6 +44,16 @@ async function reaction(client, reaction, user, add) {
             break;
         case "🅱️":
             resultMatch(false, client, reaction, user, add);
+            break;
+        default:
+            if(!add)
+                return;
+            
+            reaction.remove()
+                .catch((err) => {
+                    if(err.status !== 404)
+                        console.log(err);
+                });
             break;
     }
 }
