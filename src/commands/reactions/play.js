@@ -47,15 +47,22 @@ async function play(client, reaction, user, add) {
 
     const guild = reaction.message.guild;
 
+    const category = await guild.channels.create({
+        name: `Partida ${match._id}`,
+        type: ChannelType.GuildCategory
+    });
+
     const ca = await guild.channels.create({
         name: "Equipe A",
         type: ChannelType.GuildVoice,
+        parent: category.id,
         userLimit: match.player_limit ? match.player_limit : false
     });
 
     const cb = await guild.channels.create({
         name: "Equipe B",
         type: ChannelType.GuildVoice,
+        parent: category.id,
         userLimit: match.player_limit ? match.player_limit : false
     });
 
@@ -79,7 +86,9 @@ async function play(client, reaction, user, add) {
     channels.forEach(async (channel) => {
         await ChannelMatchModel.create({
             match_id: match._id,
-            channel_id: channel.id
+            channel_id: channel.id,
+            category_id: category.id,
+            deleted: false
         })
     })
 
