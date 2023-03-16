@@ -31,7 +31,7 @@ async function listmatches(client, msg, args) {
         order = 'desc';
     
     if(isNaN(page) || isNaN(limit) || (order != 'desc' && order != 'asc')) {
-        DeleteMessage(client, m);
+        DeleteMessage(m);
         return;
     }
 
@@ -45,7 +45,7 @@ async function listmatches(client, msg, args) {
     })
 
     if(players.length == 0) {
-        DeleteMessage(client, m);
+        DeleteMessage(m);
         return;
     }
 
@@ -69,7 +69,7 @@ async function listmatches(client, msg, args) {
         embeds: [embed2]
     })
 
-    DeleteMessage(client, msg);
+    DeleteMessage(msg);
 }
 
 module.exports = listmatches;

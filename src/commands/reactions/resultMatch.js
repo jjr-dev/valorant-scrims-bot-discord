@@ -33,7 +33,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
     })
 
     if(!match) {
-        if(m) DeleteMessage(client, m);
+        if(m) DeleteMessage(m);
         return;
     }
 
@@ -53,7 +53,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
     })
 
     if(!verify) {
-        if(m) DeleteMessage(client, m);
+        if(m) DeleteMessage(m);
         return;
     }
     
@@ -63,7 +63,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
     });
 
     if(!add) {
-        if(m) DeleteMessage(client, m);
+        if(m) DeleteMessage(m);
         return;
     }
 
@@ -78,7 +78,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
     })
 
     if(votes.length < 2) {
-        if(m) DeleteMessage(client, m);
+        if(m) DeleteMessage(m);
         return;
     }
 
@@ -95,7 +95,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
     })
 
     if(!verify) {
-        if(m) DeleteMessage(client, m);
+        if(m) DeleteMessage(m);
         return;
     }
 
@@ -160,7 +160,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
         embeds: [embed2]
     });
 
-    DeleteMessage(client, reaction.message);
+    DeleteMessage(reaction.message);
 }
 
 module.exports = resultMatch;

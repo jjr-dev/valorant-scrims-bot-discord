@@ -16,7 +16,8 @@ async function voice(client, oldChannel, newCannel) {
                         c.delete();
                     })
                     .catch((err) => {
-                        console.log(err);
+                        if(err.status !== 404)
+                            console.log(err);
                     })
             }
         }

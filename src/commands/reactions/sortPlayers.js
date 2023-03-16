@@ -33,7 +33,7 @@ async function sortPlayers(client, reaction, user, add) {
     })
 
     if(!match || match.creator_id != user.id) {
-        DeleteMessage(client, m);
+        DeleteMessage(m);
         return;
     }
 
@@ -42,7 +42,7 @@ async function sortPlayers(client, reaction, user, add) {
     });
 
     if(players.length < 2) {
-        DeleteMessage(client, m);
+        DeleteMessage(m);
         return;
     }
 
@@ -144,7 +144,7 @@ async function sortPlayers(client, reaction, user, add) {
     })
 
     sorts.map(async (sort) => {
-        DeleteMessage(client, sort.message_id, channel);
+        DeleteMessage(sort.message_id, channel);
 
         await PlayerSortMatchModel.deleteMany({
             sort_id: sort._id
@@ -163,7 +163,7 @@ async function sortPlayers(client, reaction, user, add) {
     const sort = await SortMatchModel.findOne().sort({_id: -1});
     
     if(!sort) {
-        DeleteMessage(client, m);
+        DeleteMessage(m);
         return;
     }
 
