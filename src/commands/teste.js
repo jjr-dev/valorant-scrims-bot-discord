@@ -1,14 +1,24 @@
-const DeleteMessage = require('../helpers/DeleteMessage');
+const { ChannelType } = require('discord.js');
 
 async function teste(client, msg) {
-    // Objeto da mensagem
-    DeleteMessage(msg);
+    const guild = msg.guild;
 
-    // ID da mensagem e objeto do canal
-    DeleteMessage(msg.id, msg.channel);
+    const category = await guild.channels.create({
+        name: "Categoria",
+        type: ChannelType.GuildCategory
+    });
 
-    // ID da mensagem, ID do canal e objeto do client
-    DeleteMessage(msg.id, msg.channel.id, client);
+    const ca = await guild.channels.create({
+        name: "Canal A",
+        type: ChannelType.GuildVoice,
+        parent: category.id
+    });
+
+    const cb = await guild.channels.create({
+        name: "Canal B",
+        type: ChannelType.GuildVoice,
+        parent: category.id
+    });
 }
 
 module.exports = teste;

@@ -8,6 +8,14 @@ const Schema = mongoose.Schema({
     channel_id: {
         type: String,
         required: true
+    },
+    category_id: {
+        type: String,
+        required: true
+    },
+    deleted: {
+        type: Boolean,
+        required: true
     }
 })
 
