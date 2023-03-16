@@ -37,7 +37,7 @@ async function play(client, reaction, user, add) {
     });
 
     if(!match || match.creator_id != user.id) {
-        DeleteMessage(client, m);
+        DeleteMessage(m);
         return;
     }
 
@@ -87,8 +87,8 @@ async function play(client, reaction, user, add) {
         match_id: match._id,
     });
 
-    DeleteMessage(client, reaction.message);
-    DeleteMessage(client, match.message_id, reaction.message.channel);
+    DeleteMessage(reaction.message);
+    DeleteMessage(match.message_id, reaction.message.channel);
 
     let mentions = {};
     for(let key in teams) {

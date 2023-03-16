@@ -30,7 +30,7 @@ async function sortMap(client, reaction, user, add) {
     })
 
     if(!match || match.creator_id != user.id) {
-        DeleteMessage(client, m);
+        DeleteMessage(m);
         return;
     }
 
@@ -39,7 +39,7 @@ async function sortMap(client, reaction, user, add) {
     })
 
     sorts.map(async (sort) => {
-        DeleteMessage(client, sort.message_id, channel);
+        DeleteMessage(sort.message_id, channel);
     })
 
     await MapSortMatchModel.deleteMany({
@@ -70,7 +70,7 @@ async function sortMap(client, reaction, user, add) {
             name: map.displayName
         })
     } catch(err) {
-        DeleteMessage(client, m);
+        DeleteMessage(m);
     }
 }
 

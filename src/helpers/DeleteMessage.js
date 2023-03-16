@@ -1,22 +1,23 @@
-async function DeleteMessage(client, message, channel = false) {
-    if(channel) {
-        channel = typeof channel === 'object' ? channel.id : channel;
-    } else if(typeof message === 'object' && message.channel) {
-        channel = message.channel.id;
+async function DeleteMessage(message, channel = false, client = false) {
+    if(typeof message === 'object') {
+        await message.delete()
+            .catch((err) => {
+                if (err.status !== 404)
+                    console.log(err);
+            })
     } else {
-        console.log("Err 1");
+        if(typeof channel !== 'object')
+            channel = client.channels.cache.get(channel);
+
+        channel.messages.fetch(message)
+            .then(async (msg) => {
+                await msg.delete();
+            })
+            .catch((err) => {
+                if (err.status !== 404)
+                    console.log(err);
+            })
     }
-
-    message = typeof message === 'object' ? message.id : message;
-
-    client.channels.cache.get(channel).messages.fetch(message)
-        .then((msg) => {
-            msg.delete();
-        })
-        .catch((err) => {
-            if (err.status !== 404)
-                console.log(err);
-        })
 }
 
 module.exports = DeleteMessage;

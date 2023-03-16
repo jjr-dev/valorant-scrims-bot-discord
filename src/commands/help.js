@@ -73,7 +73,7 @@ async function help(client, msg, args) {
         embeds: [embed2]
     });
 
-    DeleteMessage(client, msg);
+    DeleteMessage(msg);
 }
 
 module.exports = help;

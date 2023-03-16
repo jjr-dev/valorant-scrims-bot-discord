@@ -30,7 +30,7 @@ async function listPlayers(client, reaction, user, add) {
     })
 
     if(!match) {
-        DeleteMessage(client, m);
+        DeleteMessage(m);
         return;
     }
 

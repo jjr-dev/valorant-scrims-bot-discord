@@ -35,7 +35,7 @@ async function sortmap(client, msg, args) {
             embeds: [embed2]
         });
     } catch(err) {
-        DeleteMessage(client, m);
+        DeleteMessage(m);
     }
 }
 

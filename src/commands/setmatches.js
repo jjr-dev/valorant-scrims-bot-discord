@@ -22,12 +22,12 @@ async function setmatches(client, msg, args) {
     });
 
     if(!msg.member.roles.cache.has("1084548547212484838")) {
-        DeleteMessage(client, m);
+        DeleteMessage(m);
         return;
     }
 
     if(!user || !user.includes("<@") || !user.includes(">") || !matches || isNaN(matches) || !matches_won || isNaN(matches_won)) {
-        DeleteMessage(client, m);
+        DeleteMessage(m);
         return;
     }
 
@@ -77,7 +77,7 @@ async function setmatches(client, msg, args) {
         embeds: [embed2]
     });
 
-    DeleteMessage(client, msg);
+    DeleteMessage(msg);
 }
 
 module.exports = setmatches;

@@ -14,7 +14,7 @@ async function ping(client, msg) {
         .setTitle('🏓 Pong!')
         .setDescription(`Olá ${msg.author}, seu ping está em \`${client.ws.ping}ms\`.`)
 
-    DeleteMessage(client, m);
+    DeleteMessage(m);
     
     msg.channel.send({
         embeds: [embed]
