@@ -69,6 +69,10 @@ async function help(client, msg, args) {
                 value: `${prefix}ping`,
             },
             {
+                name: "Criar sala privada",
+                value: `${prefix}private ${EmbedWhiteSpace()}`,
+            },
+            {
                 name: "Ver versão atual",
                 value: `${prefix}version ${EmbedWhiteSpace()}`,
             },

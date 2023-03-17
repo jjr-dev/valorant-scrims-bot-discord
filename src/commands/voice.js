@@ -29,7 +29,7 @@ async function voice(client, oldChannel, newCannel) {
 
                 if(verify_category.length == 0) {
                     const match = await MatchModel.findOne({
-                        match_id: verify.match_id,
+                        _id: verify.match_id,
                     });
 
                     const category = await guild.channels.cache.get(match.category_id);
@@ -38,6 +38,7 @@ async function voice(client, oldChannel, newCannel) {
                     if(category) {
                         category.delete()
                             .catch((err) => {
+                                console.log(err);
                                 if(err.status !== 404)
                                     console.log(err);
                             })

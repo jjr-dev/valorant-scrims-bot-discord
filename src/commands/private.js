@@ -22,10 +22,23 @@ async function private(client, msg) {
 
     const channel_name = `pv-${msg.author.id}`;
 
-    let channel = client.channels.cache.find((c) => c.name === channel_name);
+    let channel = await client.channels.cache.find((c) => c.name === channel_name);
 
     if(!channel) {
         const everyone = guild.roles.cache.find((r) => r.name === '@everyone');
+
+        await msg.guild.roles.cache.forEach(async (role) => {
+            if(role.name === 'Conversa sozinho') {
+                const has = await msg.member.roles.cache.has(role.id);
+    
+                if(has)
+                    role.delete()
+                        .catch((err) => {
+                            if(err.status !== 404)
+                                console.log(err);
+                        })
+            }
+        })
 
         const role = await guild.roles.create({
             name: `Conversa sozinho`

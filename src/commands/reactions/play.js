@@ -110,13 +110,6 @@ async function play(client, reaction, user, add) {
         })
     })
 
-    await MatchModel.updateOne({
-        match_id: match._id
-    }, {
-        role_id: role.id,
-        category_id: category.id
-    })
-
     const map = await MapSortMatchModel.findOne({
         match_id: match._id,
     });
@@ -139,7 +132,9 @@ async function play(client, reaction, user, add) {
     await MatchModel.findOneAndUpdate({
         _id: match._id,
     }, {
-        result_id: m.id
+        result_id: m.id,
+        role_id: role.id,
+        category_id: category.id
     });
     
     const embed2 = new EmbedBuilder()
