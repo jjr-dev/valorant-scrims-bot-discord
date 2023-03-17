@@ -37,7 +37,7 @@ async function listmatches(client, msg, args) {
 
     const list = [];
     players.forEach((player) => {
-        list.push(`• ${userMention(player.user_id)} | Partidas: ${player.matches_won}/${player.matches} • WR: ${(player.win_rate * 100).toFixed(0)}%`)
+        list.push(`${userMention(player.user_id)} | Partidas: ${player.matches_won}/${player.matches} • WR: ${(player.win_rate * 100).toFixed(0)}%`)
     })
 
     if(players.length == 0) {
