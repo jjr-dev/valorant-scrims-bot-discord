@@ -69,6 +69,10 @@ client.on(Events.VoiceStateUpdate, async (oldChannel, newCannel) => {
     commands['voice'].call(this, client, oldChannel, newCannel);
 })
 
+client.on(Events.InteractionCreate, async (interaction) => {
+    commands['buttons'].call(this, client, interaction);
+})
+
 const database = require('./db');
 database();
 

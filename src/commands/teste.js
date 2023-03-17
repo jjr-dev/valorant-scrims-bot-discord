@@ -1,24 +1,30 @@
-const { ChannelType } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 
 async function teste(client, msg) {
-    const guild = msg.guild;
+    const embed = new EmbedBuilder()
+        .setColor("Random")
+        .setAuthor({
+            name: client.user.username,
+            iconURL: client.user.displayAvatarURL()
+        })
+        .setTitle('Mensagem com botões')
+        .setDescription("Clique em algum botão")
 
-    const category = await guild.channels.create({
-        name: "Categoria",
-        type: ChannelType.GuildCategory
+    const row = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('sort-match-map')
+                .setLabel('Sortear mapa')
+                .setStyle(ButtonStyle.Secondary)
+                .setEmoji("🗺️")
+        );
+
+    const m = await msg.channel.send({
+        embeds: [embed],
+        components: [row]
     });
 
-    const ca = await guild.channels.create({
-        name: "Canal A",
-        type: ChannelType.GuildVoice,
-        parent: category.id
-    });
-
-    const cb = await guild.channels.create({
-        name: "Canal B",
-        type: ChannelType.GuildVoice,
-        parent: category.id
-    });
+    await m.react("🟢")
 }
 
 module.exports = teste;
