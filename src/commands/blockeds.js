@@ -41,7 +41,18 @@ async function blockeds(client, msg, args) {
     })
 
     if(blockeds.length == 0) {
-        DeleteMessage(m);
+        const embed2 = new EmbedBuilder()
+            .setColor("Random")
+            .setAuthor({
+                name: client.user.username,
+                iconURL: client.user.displayAvatarURL()
+            })
+            .setTitle('Lista de jogadores bloqueados')
+            .setDescription(`O membro ${msg.author} não possui nenhum jogador bloqueado ${EmbedWhiteSpace()}`)
+
+        await m.edit({
+            embeds: [embed2]
+        })
         return;
     }
 
