@@ -18,6 +18,12 @@ const Schema = mongoose.Schema({
     },
     result_id: {
         type: String
+    },
+    role_id: {
+        type: String
+    },
+    category_id: {
+        type: String
     }
 })
 
