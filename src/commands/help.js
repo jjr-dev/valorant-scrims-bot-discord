@@ -37,8 +37,8 @@ async function help(client, msg, args) {
                 value: `${prefix}matches \`user_mention\``,
             },
             {
-                name: "Ver partidas de todos os membros 🛠️",
-                value: `${prefix}listmatches \`page\` \`limit\` \`order\``,
+                name: "Ver lista de jogadores 🛠️",
+                value: `${prefix}players \`page\` \`configs\``,
             },
             {
                 name: "Definir partidas de membro 👑",
