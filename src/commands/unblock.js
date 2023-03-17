@@ -5,7 +5,7 @@ const BlockedPlayerModel = require('../models/BlockedPlayer');
 const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
 const DeleteMessage = require('../helpers/DeleteMessage');
 
-async function unblockplayer(client, msg, args) {
+async function unblock(client, msg, args) {
     const [ user_id ] = args;
 
     const embed1 = new EmbedBuilder()
@@ -79,4 +79,4 @@ async function unblockplayer(client, msg, args) {
     DeleteMessage(msg);
 }
 
-module.exports = unblockplayer;
+module.exports = unblock;

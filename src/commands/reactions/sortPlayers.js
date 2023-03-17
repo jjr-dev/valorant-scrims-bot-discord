@@ -5,6 +5,7 @@ const PlayerMatchModel = require('../../models/PlayerMatch');
 const PlayerSortMatchModel = require('../../models/PlayerSortMatch');
 const SortMatchModel = require('../../models/SortMatch');
 const PlayerModel = require('../../models/Player');
+const BlockedPlayerModel = require('../../models/BlockedPlayer');
 
 const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
 const DeleteMessage = require('../../helpers/DeleteMessage');
@@ -73,6 +74,7 @@ async function sortPlayers(client, reaction, user, add) {
     let difference;
     let teams;
     let teams_win_rate;
+    let blockeds;
 
     let best_sort = {
         difference: false,
@@ -101,14 +103,35 @@ async function sortPlayers(client, reaction, user, add) {
         })
     
         teams_win_rate = {};
+        teams_user_ids = {};
         for(let type in teams) {
             const team = teams[type];
     
             teams_win_rate[type] = [];
+            teams_user_ids[type] = [];
             team.map((player) => {
-                teams_win_rate[type].push(players_win_rate[player.user_id])
+                teams_win_rate[type].push(players_win_rate[player.user_id]);
+                teams_user_ids[type].push(player.user_id);
             })
         }
+
+        blockeds = [];
+        for(let type in teams_user_ids) {
+            const ids = teams_user_ids[type];
+
+            const team_blockeds = await BlockedPlayerModel.find({
+                'user_id': {
+                    $in: ids
+                },
+                'blocked_id': {
+                    $in: ids
+                }
+            })
+
+            if(team_blockeds.length > 0)
+                blockeds.push(type);
+        }
+        
     
         for(let type in teams_win_rate) {
             const team = teams_win_rate[type];
@@ -132,7 +155,7 @@ async function sortPlayers(client, reaction, user, add) {
             best_sort.teams_win_rate = teams_win_rate;
             best_sort.difference     = difference;
         }
-    } while(difference > range && count <= limit)
+    } while((difference > range || blockeds.length > 0) && count <= limit)
 
     if(count >= limit) {
         teams = best_sort.teams;
