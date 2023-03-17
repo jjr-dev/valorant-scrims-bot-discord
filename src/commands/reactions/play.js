@@ -97,7 +97,7 @@ async function play(client, reaction, user, add) {
             await member.voice.setChannel(player.attacker ? ca : cb);
 
         if(member)
-            member.roles.add(role.id);
+            await member.roles.add(role.id);
         
         teams[player.attacker ? 'attacker' : 'defender'].push(player);
     }
@@ -107,7 +107,6 @@ async function play(client, reaction, user, add) {
         await ChannelMatchModel.create({
             match_id: match._id,
             channel_id: channel.id,
-            deleted: false
         })
     })
 
