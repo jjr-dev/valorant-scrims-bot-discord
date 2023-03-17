@@ -46,11 +46,11 @@ async function help(client, msg, args) {
             },
             {
                 name: "Bloquear jogador 🛠️",
-                value: `${prefix}blockplayer \`user_id*\``,
+                value: `${prefix}block \`user_id*\``,
             },
             {
                 name: "Desbloquear jogador 🛠️",
-                value: `${prefix}unblockplayer \`user_id*\``,
+                value: `${prefix}unblock \`user_id*\``,
             },
             {
                 name: "Listar jogadores bloqueados 🛠️",
