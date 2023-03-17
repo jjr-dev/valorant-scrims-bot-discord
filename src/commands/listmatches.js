@@ -6,7 +6,7 @@ const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
 const DeleteMessage = require('../helpers/DeleteMessage');
 
 async function listmatches(client, msg, args) {
-    let [ page, limit, order ] = args;
+    let [ page, order ] = args;
 
     const embed1 = new EmbedBuilder()
         .setColor("Random")
@@ -21,16 +21,12 @@ async function listmatches(client, msg, args) {
         embeds: [embed1]
     });
 
-    if(!page)
-        page = 1;
-    
-    if(!limit)
-        limit = 10;
+    const limit = 10;
 
-    if(!order)
-        order = 'desc';
+    if(!page) page = 1;
+    if(!order) order = 'desc';
     
-    if(isNaN(page) || isNaN(limit) || (order != 'desc' && order != 'asc')) {
+    if(isNaN(page) || (order != 'desc' && order != 'asc')) {
         DeleteMessage(m);
         return;
     }
@@ -41,7 +37,7 @@ async function listmatches(client, msg, args) {
 
     const list = [];
     players.forEach((player) => {
-        list.push(`${userMention(player.user_id)} | Partidas: ${player.matches_won}/${player.matches} • WR: ${(player.win_rate * 100).toFixed(0)}%`)
+        list.push(`• ${userMention(player.user_id)} | Partidas: ${player.matches_won}/${player.matches} • WR: ${(player.win_rate * 100).toFixed(0)}%`)
     })
 
     if(players.length == 0) {
