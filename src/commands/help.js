@@ -45,6 +45,14 @@ async function help(client, msg, args) {
                 value: `${prefix}setmatches \`user_mention*\` \`matches_won*\` \`matches*\``,
             },
             {
+                name: "Bloquear jogador 🛠️",
+                value: `${prefix}blockplayer \`user_id*\``,
+            },
+            {
+                name: "Desbloquear jogador 🛠️",
+                value: `${prefix}unblockplayer \`user_id*\``,
+            },
+            {
                 name: "Sortear mapa",
                 value: `${prefix}sortmap`,
             },
