@@ -53,6 +53,10 @@ async function help(client, msg, args) {
                 value: `${prefix}unblockplayer \`user_id*\``,
             },
             {
+                name: "Listar jogadores bloqueados 🛠️",
+                value: `${prefix}blockeds`,
+            },
+            {
                 name: "Sortear mapa",
                 value: `${prefix}sortmap`,
             },
