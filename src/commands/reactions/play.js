@@ -1,4 +1,4 @@
-const { EmbedBuilder, ChannelType, userMention } = require('discord.js');
+const { EmbedBuilder, ChannelType, userMention, PermissionsBitField } = require('discord.js');
 
 const MatchModel = require('../../models/Match');
 const PlayerSortMatchModel = require('../../models/PlayerSortMatch');
@@ -47,10 +47,27 @@ async function play(client, reaction, user, add) {
 
     const guild = reaction.message.guild;
 
+    const role = await guild.roles.create({
+        name: `Jogando`,
+        reason: `Jogando a partida ${match._id}`
+    })
+
+    const everyone = guild.roles.cache.find((r) => r.name === '@everyone');
+
     const category = await guild.channels.create({
         name: `Partida ${match._id}`,
-        type: ChannelType.GuildCategory
-    });
+        type: ChannelType.GuildCategory,
+        permissionOverwrites: [
+            {
+                id: everyone.id,
+                deny: [PermissionsBitField.Flags.ViewChannel]
+            },
+            {
+                id: role.id,
+                allow: [PermissionsBitField.Flags.ViewChannel]
+            }
+        ]
+    })
 
     const ca = await guild.channels.create({
         name: "Equipe A",
@@ -76,8 +93,11 @@ async function play(client, reaction, user, add) {
 
         const member = await guild.members.cache.get(player.user_id);
 
-        if(member && member.voice.channel)
+        if(member && member.voice.channel) 
             await member.voice.setChannel(player.attacker ? ca : cb);
+
+        if(member)
+            member.roles.add(role.id);
         
         teams[player.attacker ? 'attacker' : 'defender'].push(player);
     }
@@ -87,9 +107,15 @@ async function play(client, reaction, user, add) {
         await ChannelMatchModel.create({
             match_id: match._id,
             channel_id: channel.id,
-            category_id: category.id,
             deleted: false
         })
+    })
+
+    await MatchModel.updateOne({
+        match_id: match._id
+    }, {
+        role_id: role.id,
+        category_id: category.id
     })
 
     const map = await MapSortMatchModel.findOne({
