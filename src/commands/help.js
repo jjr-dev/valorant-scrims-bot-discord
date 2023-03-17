@@ -37,12 +37,24 @@ async function help(client, msg, args) {
                 value: `${prefix}matches \`user_mention\``,
             },
             {
-                name: "Ver partidas de todos os membros 🛠️",
-                value: `${prefix}listmatches \`page\` \`limit\` \`order\``,
+                name: "Ver lista de jogadores 🛠️",
+                value: `${prefix}players \`page\` \`configs\``,
             },
             {
                 name: "Definir partidas de membro 👑",
                 value: `${prefix}setmatches \`user_mention*\` \`matches_won*\` \`matches*\``,
+            },
+            {
+                name: "Bloquear jogador 🛠️",
+                value: `${prefix}blockplayer \`user_id*\``,
+            },
+            {
+                name: "Desbloquear jogador 🛠️",
+                value: `${prefix}unblockplayer \`user_id*\``,
+            },
+            {
+                name: "Listar jogadores bloqueados 🛠️",
+                value: `${prefix}blockeds`,
             },
             {
                 name: "Sortear mapa",
