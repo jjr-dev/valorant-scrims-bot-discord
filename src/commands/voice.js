@@ -1,8 +1,10 @@
 const ChannelMatchModel = require('../models/ChannelMatch');
+const MatchModel = require('../models/Match');
 
 async function voice(client, oldChannel, newCannel) {
     if(oldChannel.channel) {
-        const channel = oldChannel.channel
+        const channel = oldChannel.channel;
+        const guild   = oldChannel.guild;
         const members = channel.members;
 
         if(members.size === 0) {
@@ -11,38 +13,43 @@ async function voice(client, oldChannel, newCannel) {
             })
 
             if(verify) {
-                channel.fetch()
-                    .then((c) => {
-                        c.delete();
-                    })
+                channel.delete()
                     .catch((err) => {
                         if(err.status !== 404)
                             console.log(err);
                     })
 
-                await ChannelMatchModel.updateOne({
+                await ChannelMatchModel.deleteOne({
                     _id: verify._id,
-                }, {
-                    deleted: true
                 })
 
                 const verify_category = await ChannelMatchModel.find({
-                    match_id: verify.match_id,
-                    deleted: true
+                    match_id: verify.match_id
                 });
 
-                if(verify_category.length >= 2) {
-                    const category = await oldChannel.guild.channels.cache.get(verify.category_id);
+                if(verify_category.length == 0) {
+                    const match = await MatchModel.findOne({
+                        match_id: verify.match_id,
+                    });
+
+                    const category = await guild.channels.cache.get(match.category_id);
+                    const role = await guild.roles.cache.get(match.role_id);
                     
-                    if(category)
-                        category.fetch()
-                            .then((c) => {
-                                c.delete();
-                            })
+                    if(category) {
+                        category.delete()
                             .catch((err) => {
                                 if(err.status !== 404)
                                     console.log(err);
                             })
+                    }
+
+                    if(role) {
+                        role.delete()
+                            .catch((err) => {
+                                if(err.status !== 404)
+                                    console.log(err);
+                            })
+                    }
                 }
 
             }
