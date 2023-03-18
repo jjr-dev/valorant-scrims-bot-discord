@@ -16,6 +16,9 @@ const Schema = mongoose.Schema({
     win_rate: {
         type: Number,
         required: true
+    },
+    link_id: {
+        type: String
     }
 })
 
