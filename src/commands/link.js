@@ -95,7 +95,8 @@ async function link(client, msg, args) {
         await PlayerModel.findOneAndUpdate({
             user_id: msg.author.id
         }, {
-            link_id: account.puuid
+            link_id: account.puuid,
+            link_region: account.region
         });
 
         const embed2 = new EmbedBuilder()

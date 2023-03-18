@@ -19,6 +19,9 @@ const Schema = mongoose.Schema({
     },
     link_id: {
         type: String
+    },
+    link_region: {
+        type: String
     }
 })
 

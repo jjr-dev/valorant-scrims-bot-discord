@@ -42,7 +42,8 @@ async function unlink(client, msg, args) {
     await PlayerModel.findOneAndUpdate({
         user_id: msg.author.id
     }, {
-        link_id: null
+        link_id: null,
+        link_region: null
     });
 
     const embed2 = new EmbedBuilder()
