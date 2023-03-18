@@ -32,6 +32,11 @@ async function play(client, reaction, user, add) {
         message_id: reaction.message.id
     });
 
+    if(!sort) {
+        DeleteMessage(m);
+        return;
+    }
+
     const match = await MatchModel.findOne({
         _id: sort.match_id
     });
