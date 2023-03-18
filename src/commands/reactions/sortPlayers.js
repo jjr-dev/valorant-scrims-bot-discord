@@ -64,7 +64,7 @@ async function sortPlayers(client, reaction, user, add) {
     })
 
     players.map((player) => {
-        if(!players_win_rate[player.user_id])
+        if(players_win_rate[player.user_id] === undefined)
             players_win_rate[player.user_id] = 0.5;
     })
 
