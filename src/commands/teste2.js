@@ -18,6 +18,9 @@ async function teste2(client, msg, args) {
     if(res) {
         const match = res.data;
 
+        if(!match)
+            return;
+
         const image = await ResultImage(match);
         
         const attachment = new AttachmentBuilder(image, { name: 'result.png' });
