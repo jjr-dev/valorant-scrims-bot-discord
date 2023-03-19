@@ -186,6 +186,9 @@ async function resultMatch(attacker, client, reaction, user, add) {
                 return;
     
             const matches = obj.data;
+
+            if(!matches)
+                return;
     
             const image = await ResultImage(matches[0]);
             const attachment = new AttachmentBuilder(image, { name: `match-result-${match._id}.png` });
