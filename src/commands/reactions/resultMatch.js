@@ -1,4 +1,4 @@
-const { EmbedBuilder, userMention } = require('discord.js');
+const { AttachmentBuilder, EmbedBuilder, userMention } = require('discord.js');
 
 const MatchModel = require('../../models/Match');
 const PlayerSortMatchModel = require('../../models/PlayerSortMatch');
@@ -8,6 +8,9 @@ const PlayerModel = require('../../models/Player');
 
 const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
 const DeleteMessage = require('../../helpers/DeleteMessage');
+const ResultImage = require("../../helpers/ResultImage");
+
+const VAPI = require('../../helpers/ValorantAPI');
 
 async function resultMatch(attacker, client, reaction, user, add) {
     const channel = client.channels.cache.get(reaction.message.channelId);
@@ -126,16 +129,16 @@ async function resultMatch(attacker, client, reaction, user, add) {
             const matches_won = (player ? player.matches_won : 0) + (type == 'winners' ? 1 : 0);
             const win_rate    = (matches_won / matches).toFixed(2);
 
-            await PlayerModel.deleteOne({
+            await PlayerModel.findOneAndUpdate({
                 user_id: user.user_id
-            });
-
-            await PlayerModel.create({
+            }, {
                 user_id: user.user_id,
                 matches,
                 matches_won,
-                win_rate
-            })
+                win_rate,
+            }, {
+                upsert: true
+            });
         })
     }
 
@@ -161,6 +164,39 @@ async function resultMatch(attacker, client, reaction, user, add) {
     });
 
     DeleteMessage(reaction.message);
+
+    for(let prop in captains) {
+        const captain = captains[prop];
+
+        const player = await PlayerModel.findOne({
+            user_id: captain.user_id
+        })
+
+        if(player.link_id) {
+            const obj = await VAPI.getMatches({
+                puuid: player.link_id,
+                region: player.link_region ? player.link_region : 'br',
+                filters: {
+                    type: 'custom',
+                    size: 1
+                }
+            })
+    
+            if(obj.errors)
+                return;
+    
+            const matches = obj.data;
+    
+            const image = await ResultImage(matches[0]);
+            const attachment = new AttachmentBuilder(image, { name: `match-result-${match._id}.png` });
+    
+            await m.reply({
+                files: [attachment]
+            });
+
+            break;
+        }
+    }
 }
 
 module.exports = resultMatch;

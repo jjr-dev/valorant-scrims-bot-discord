@@ -37,7 +37,7 @@ async function help(client, msg, args) {
                 value: `${prefix}matches \`user_mention\``,
             },
             {
-                name: "Ver lista de jogadores 🛠️",
+                name: "Ver lista de jogadores",
                 value: `${prefix}players \`page\` \`configs\``,
             },
             {
@@ -45,16 +45,24 @@ async function help(client, msg, args) {
                 value: `${prefix}setmatches \`user_mention*\` \`matches_won*\` \`matches*\``,
             },
             {
-                name: "Bloquear jogador 🛠️",
+                name: "Bloquear jogador",
                 value: `${prefix}block \`user_id*\``,
             },
             {
-                name: "Desbloquear jogador 🛠️",
+                name: "Desbloquear jogador",
                 value: `${prefix}unblock \`user_id*\``,
             },
             {
-                name: "Listar jogadores bloqueados 🛠️",
+                name: "Listar jogadores bloqueados",
                 value: `${prefix}blockeds`,
+            },
+            {
+                name: "Vincular conta",
+                value: `${prefix}link \`name#tag\``,
+            },
+            {
+                name: "Desvincular conta",
+                value: `${prefix}unlink`,
             },
             {
                 name: "Sortear mapa",

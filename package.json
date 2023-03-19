@@ -4,13 +4,14 @@
   "description": "",
   "main": "bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nodemon test.js",
     "start": "nodemon bot.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "canvas": "^2.11.0",
     "discord.js": "^14.7.1",
     "g": "^2.0.1",
     "mongoose": "^7.0.1",
