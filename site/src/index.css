@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+    --color01: #FF4654;
+}
+
+* {
+    font-family: 'Poppins', Arial, Helvetica, sans-serif !important;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+p {
+    margin: 0;
+}
+
+.header {
+    width: 100%;
+    height: 100vh;
+    background-color: #141414;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+.header #agent-image {
+    position: absolute;
+    right: -400px;
+    top: -100px;
+    width: 100%;
+}
+
+.header #agent-background {
+    position: absolute;
+    right: -100px;
+    top: -100px;
+}
+
+.header .card-legal {
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+    padding: 15px;
+    border-radius: 0;
+    border: 3px solid var(--color01);
+    max-width: calc(100% - 60px);
+    background-color: #141414e3;
+}
+
+.header #logo h1 {
+    font-size: 70px;
+    line-height: 70px;
+    margin: 0;
+    color: var(--color01);
+}
+
+.header #logo h2 {
+    font-size: 98px;
+    line-height: 90px;
+    margin: 0;
+}
+
+.header .y-center {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 15px;
+    z-index: 9;
+    background-color: #141414e3;
+    border-radius: 5px;
+}
+
+.header #slogan {
+    max-width: 400px;
+}
+
+.header #buttons button {
+    border: 0;
+    border-radius: 50px;
+    padding: 10px 25px;
+    transition: .2s;
+    cursor: pointer;
+}
+
+.header #buttons a {
+    margin-right: 5px;
+}
+
+.header #buttons button svg {
+    width: 24px;
+    margin-right: 5px;
+    margin-bottom: -6px;
+}
+
+.header #buttons button span {
+    width: 24px;
+    font-size: 18px;
+}
+
+.header #buttons button.color01 {
+    background-color: var(--color01);
+    color: #fff;
+}
+
+.header #buttons button.color01 svg {
+    fill: #fff;
+    margin-bottom: -3px;
+}
+
+.header #buttons button:hover {
+    background-color: #979797;
+}
+
+.header #buttons button.color01:hover {
+    background-color: #a7313b;
+}
+
+.header #buttons {
+    margin-top: 30px;
+}
+
+@media screen and (max-width: 600px) {
+    .header .y-center {
+        top: 15px;
+        transform: none;
+        top: 0;
+        width: 100%;
+        border-radius: 0;
+        height: 100vh;
+    }
+
+    .header #buttons button {
+        margin-bottom: 15px;
+    }
+
+    .header #buttons {
+        margin-top: 15px;
+    }
+
+    .header .card-legal {
+        z-index: 99;
+        left: 5px;
+        bottom: 5px;
+        padding: 10px;
+        max-width: calc(100% - 40px);
+    }
+
+    .header #agent-background {
+        right: -150px;
+    }
+
+    .header #agent-image {
+        right: -400px;
+        width: 250%;
+    }
+}
