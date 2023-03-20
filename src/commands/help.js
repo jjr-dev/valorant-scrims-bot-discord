@@ -78,7 +78,11 @@ async function help(client, msg, args) {
             },
             {
                 name: "Criar sala privada",
-                value: `${prefix}private ${EmbedWhiteSpace()}`,
+                value: `${prefix}private`,
+            },
+            {
+                name: "Ver habilidades de agente",
+                value: `${prefix}agent \`name*\` \`language\``,
             },
             {
                 name: "Ver versão atual",
