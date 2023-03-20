@@ -2,8 +2,6 @@ const { EmbedBuilder } = require('discord.js');
 
 const PlayerModel = require('../models/Player');
 
-const DeleteMessage = require('../helpers/DeleteMessage');
-
 async function unlink(client, msg, args) {
     const embed1 = new EmbedBuilder()
         .setColor("Random")
@@ -22,7 +20,7 @@ async function unlink(client, msg, args) {
         user_id: msg.author.id
     });
 
-    if(!verify.link_id) {
+    if(!verify || !verify.link_id) {
         const embed2 = new EmbedBuilder()
             .setColor("Random")
             .setAuthor({

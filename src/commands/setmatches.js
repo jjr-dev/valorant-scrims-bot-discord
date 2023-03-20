@@ -26,7 +26,7 @@ async function setmatches(client, msg, args) {
         return;
     }
 
-    if(!user || !user.includes("<@") || !user.includes(">") || !matches || isNaN(matches) || !matches_won || isNaN(matches_won)) {
+    if(!user || !user.includes("<@") || !user.includes(">") || !matches || isNaN(matches) || !matches_won || isNaN(matches_won) || matches == 0 || matches_won > matches) {
         DeleteMessage(m);
         return;
     }
@@ -34,16 +34,16 @@ async function setmatches(client, msg, args) {
     const user_id  = user.slice(0, -1).slice(2);
     const win_rate = (matches_won / matches).toFixed(2);
 
-    await PlayerModel.deleteOne({
+    await PlayerModel.findOneAndUpdate({
         user_id
-    })
-
-    await PlayerModel.create({
+    }, {
         user_id,
-        win_rate,
         matches,
-        matches_won
-    })
+        matches_won,
+        win_rate
+    }, {
+        upsert: true
+    });
 
     const wrString = `${(win_rate * 100).toFixed(0)}%`;
 
@@ -76,8 +76,6 @@ async function setmatches(client, msg, args) {
     m.edit({
         embeds: [embed2]
     });
-
-    DeleteMessage(msg);
 }
 
 module.exports = setmatches;

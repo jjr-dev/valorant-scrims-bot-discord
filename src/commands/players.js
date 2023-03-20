@@ -86,8 +86,6 @@ async function players(client, msg, args) {
     await m.edit({
         embeds: [embed2]
     })
-
-    DeleteMessage(msg);
 }
 
 module.exports = players;

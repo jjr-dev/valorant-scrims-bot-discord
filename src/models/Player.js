@@ -7,15 +7,18 @@ const Schema = mongoose.Schema({
     },
     matches: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     matches_won: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     win_rate: {
         type: Number,
-        required: true
+        required: true,
+        default: 0.5
     },
     link_id: {
         type: String

@@ -54,8 +54,6 @@ async function unblock(client, msg, args) {
         await m.edit({
             embeds: [embed2]
         });
-
-        DeleteMessage(msg);
         return;
     }
 
@@ -75,8 +73,6 @@ async function unblock(client, msg, args) {
     await m.edit({
         embeds: [embed2]
     });
-
-    DeleteMessage(msg);
 }
 
 module.exports = unblock;

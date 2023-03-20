@@ -87,8 +87,6 @@ async function private(client, msg) {
     setTimeout(() => {
         DeleteMessage(m);
     }, seconds * 1000)
-
-    DeleteMessage(msg);
 }
 
 module.exports = private;

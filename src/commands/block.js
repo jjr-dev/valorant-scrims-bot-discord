@@ -74,7 +74,6 @@ async function block(client, msg, args) {
             embeds: [embed2]
         });
 
-        DeleteMessage(msg);
         return;
     }
 
@@ -98,8 +97,6 @@ async function block(client, msg, args) {
     await m.edit({
         embeds: [embed2]
     });
-
-    DeleteMessage(msg);
 }
 
 module.exports = block;

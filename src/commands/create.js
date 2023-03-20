@@ -71,8 +71,6 @@ async function create(client, msg, args) {
     await m.react('📃');
     await m.react('🗺️');
     await m.react('🎲');
-
-    DeleteMessage(msg)
 }
 
 module.exports = create;
