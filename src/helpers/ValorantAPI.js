@@ -1,6 +1,9 @@
 class ValorantAPI {
     constructor() {
-        this.url = "https://api.henrikdev.xyz/valorant";
+        this.url = {
+            game: "https://api.henrikdev.xyz/valorant",
+            assets: "https://valorant-api.com"
+        }
     }
 
     getAccount({ name, tag, puuid, force = false }) {
@@ -8,12 +11,12 @@ class ValorantAPI {
             if(typeof force !== "boolean")
                 reject();
 
-            let url;
+            let url = `${this.url.game}/v1`;
 
             if(name && tag)
-                url = `${this.url}/v1/account/${name}/${tag}?force=${force}`;
+                url += `/account/${name}/${tag}?force=${force}`;
             else if(puuid)
-                url = `${this.url}/v1/by-puuid/account/${puuid}?force=${force}`;
+                url += `/by-puuid/account/${puuid}?force=${force}`;
             else
                 reject();
 
@@ -29,7 +32,7 @@ class ValorantAPI {
 
     getMatches({ puuid, region, filters = false }) {
         return new Promise(async (resolve, reject) => {
-            let url = `${this.url}/v3/by-puuid/matches/${region}/${puuid}`
+            let url = `${this.url.game}/v3/by-puuid/matches/${region}/${puuid}`
 
             if(filters) {
                 const strs = [];
@@ -53,8 +56,46 @@ class ValorantAPI {
 
     getMatch({ match_id }) {
         return new Promise(async (resolve, reject) => {
-            const url = `${this.url}/v2/match/${match_id}`
+            const url = `${this.url.game}/v2/match/${match_id}`
 
+            fetch(url)
+                .then(async (res) => {
+                    res = await res.json();
+
+                    resolve(res);
+                })
+                .catch((err) => reject(err))
+        })
+    }
+
+    getAgents({ language = false, playable = true }) {
+        return new Promise(async (resolve, reject) => {
+            let url = `${this.url.assets}/v1/agents`
+
+            const querys = [];
+            if(language) querys.push(`language=${language}`);
+            if(playable) querys.push(`isPlayableCharacter=${playable}`);
+
+            if(querys.length > 0)
+                url += `?${querys.join('&')}`;
+            
+            fetch(url)
+                .then(async (res) => {
+                    res = await res.json();
+
+                    resolve(res);
+                })
+                .catch((err) => reject(err))
+        })
+    }
+
+    getAgent({ agent_id, language = false }) {
+        return new Promise(async (resolve, reject) => {
+            let url = `${this.url.assets}/v1/agents/${agent_id}`
+
+            if(language )
+                url += `?language=${language}`
+            
             fetch(url)
                 .then(async (res) => {
                     res = await res.json();
