@@ -11,6 +11,8 @@ async function teste2(client, msg, args) {
         return;
     }
 
+    const channel = await client.channels.cache.get("1087450850114424873");
+
     const res = await VAPI.getMatch({
         match_id
     });
@@ -25,9 +27,9 @@ async function teste2(client, msg, args) {
         
         const attachment = new AttachmentBuilder(image, { name: 'result.png' });
 
-        msg.reply({
+        await channel.send({
             files: [attachment]
-        });
+        })
     }
 }
 
