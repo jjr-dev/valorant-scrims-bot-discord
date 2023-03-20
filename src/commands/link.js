@@ -19,7 +19,7 @@ async function link(client, msg, args) {
         .setTitle('Vinculando conta')
         .setDescription("`Por favor, aguarde...`")
 
-    const m = await msg.channel.send({
+    const m = await msg.reply({
         embeds: [embed1]
     });
 

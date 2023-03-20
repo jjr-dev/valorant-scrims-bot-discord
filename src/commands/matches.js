@@ -16,7 +16,7 @@ async function matches(client, msg, args) {
         .setTitle('Buscando partidas')
         .setDescription("`Por favor, aguarde...`")
 
-    const m = await msg.channel.send({
+    const m = await msg.reply({
         embeds: [embed1]
     });
 

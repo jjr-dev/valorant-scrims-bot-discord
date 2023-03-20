@@ -3,7 +3,7 @@ const { EmbedBuilder } = require('discord.js');
 const DeleteMessage = require('../helpers/DeleteMessage');
 
 async function ping(client, msg) {
-    const m = await msg.channel.send("Ping?");
+    const m = await msg.reply("Ping?");
 
     const embed = new EmbedBuilder()
         .setColor("Random")
@@ -16,7 +16,7 @@ async function ping(client, msg) {
 
     DeleteMessage(m);
     
-    msg.channel.send({
+    msg.reply({
         embeds: [embed]
     });
 }

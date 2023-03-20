@@ -17,7 +17,7 @@ async function create(client, msg, args) {
         .setTitle('Configurando SCRIM')
         .setDescription("`Por favor, aguarde...`")
 
-    const m = await msg.channel.send({
+    const m = await msg.reply({
         embeds: [embed1]
     });
 

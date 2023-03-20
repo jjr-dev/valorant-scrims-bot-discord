@@ -17,7 +17,7 @@ async function blockeds(client, msg, args) {
         .setTitle('Listando jogadores bloqueados')
         .setDescription("`Por favor, aguarde...`")
 
-    const m = await msg.channel.send({
+    const m = await msg.reply({
         embeds: [embed1]
     });
 

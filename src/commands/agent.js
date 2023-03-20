@@ -18,7 +18,7 @@ async function agent(client, msg, args) {
         .setTitle('Buscando agente')
         .setDescription("`Por favor, aguarde...`")
 
-    const m = await msg.channel.send({
+    const m = await msg.reply({
         embeds: [embed1]
     });
 

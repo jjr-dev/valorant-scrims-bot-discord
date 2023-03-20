@@ -11,7 +11,7 @@ async function version(client, msg) {
         .setTitle('Versão')
         .setDescription(`Olá ${msg.author}, a versão atual do BOT é \`${configs.version}\`.`)
 
-    msg.channel.send({
+    msg.reply({
         embeds: [embed]
     });
 }

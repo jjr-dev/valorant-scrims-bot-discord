@@ -8,7 +8,7 @@ const resultMatch = require('./reactions/resultMatch');
 async function reaction(client, reaction, user, add) {
     if(user.bot)
         return;
-
+        
     const emoji = reaction._emoji.name || reaction._emoji.id;
 
     let isBotMsg = false;
@@ -16,7 +16,7 @@ async function reaction(client, reaction, user, add) {
         .then((msg) => {
             const author = msg.author;
 
-            if(author.id === '1083819033247358987')
+            if(author.id === '1083813927877627955')
                 isBotMsg = true;
         });
 
