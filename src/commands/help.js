@@ -100,8 +100,6 @@ async function help(client, msg, args) {
     m.edit({
         embeds: [embed2]
     });
-
-    DeleteMessage(msg);
 }
 
 module.exports = help;

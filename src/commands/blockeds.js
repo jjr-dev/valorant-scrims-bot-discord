@@ -75,8 +75,6 @@ async function blockeds(client, msg, args) {
     await m.edit({
         embeds: [embed2]
     })
-
-    DeleteMessage(msg);
 }
 
 module.exports = blockeds;

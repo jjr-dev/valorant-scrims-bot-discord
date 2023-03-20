@@ -135,7 +135,7 @@ async function resultMatch(attacker, client, reaction, user, add) {
                 user_id: user.user_id,
                 matches,
                 matches_won,
-                win_rate,
+                win_rate
             }, {
                 upsert: true
             });

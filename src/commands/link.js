@@ -41,7 +41,7 @@ async function link(client, msg, args) {
         user_id: msg.author.id
     });
 
-    if(verify.link_id) {
+    if(verify && verify.link_id) {
         const embed2 = new EmbedBuilder()
             .setColor("Random")
             .setAuthor({
@@ -97,6 +97,8 @@ async function link(client, msg, args) {
         }, {
             link_id: account.puuid,
             link_region: account.region
+        }, {
+            upsert: true
         });
 
         const embed2 = new EmbedBuilder()
