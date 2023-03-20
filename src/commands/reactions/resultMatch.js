@@ -4,6 +4,7 @@ const MatchModel = require('../../models/Match');
 const PlayerSortMatchModel = require('../../models/PlayerSortMatch');
 const VoteResultMatchModel = require('../../models/VoteResultMatch');
 const SortMatchModel = require('../../models/SortMatch');
+const MapSortMatchModel = require('../../models/MapSortMatch');
 const PlayerModel = require('../../models/Player');
 
 const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
@@ -189,19 +190,25 @@ async function resultMatch(attacker, client, reaction, user, add) {
 
             if(!matches)
                 return;
-    
-            const image = await ResultImage(matches[0]);
 
-            if(image) {
-                const attachment = new AttachmentBuilder(image, { name: `match-result-${match._id}.png` });
-    
-                const channel = await client.channels.cache.get("1087450850114424873");
-    
-                await channel.send({
-                    files: [attachment]
-                })
-                
-                break;
+            const map = await MapSortMatchModel.findOne({
+                match_id: match._id
+            });
+
+            if(matches[0].metadata.map.toLowerCase() == map.name.toLowerCase()) {
+                const image = await ResultImage(matches[0]);
+
+                if(image) {
+                    const attachment = new AttachmentBuilder(image, { name: `match-result-${match._id}.png` });
+        
+                    const channel = await client.channels.cache.get("1087450850114424873");
+        
+                    await channel.send({
+                        files: [attachment]
+                    })
+                    
+                    break;
+                }
             }
         }
     }
