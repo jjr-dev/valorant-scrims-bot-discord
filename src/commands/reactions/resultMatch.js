@@ -191,15 +191,18 @@ async function resultMatch(attacker, client, reaction, user, add) {
                 return;
     
             const image = await ResultImage(matches[0]);
-            const attachment = new AttachmentBuilder(image, { name: `match-result-${match._id}.png` });
-    
-            const channel = await client.channels.cache.get("1087450850114424873");
 
-            await channel.send({
-                files: [attachment]
-            })
-            
-            break;
+            if(image) {
+                const attachment = new AttachmentBuilder(image, { name: `match-result-${match._id}.png` });
+    
+                const channel = await client.channels.cache.get("1087450850114424873");
+    
+                await channel.send({
+                    files: [attachment]
+                })
+                
+                break;
+            }
         }
     }
 }

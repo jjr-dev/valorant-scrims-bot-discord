@@ -23,6 +23,10 @@ async function ResultImage(match) {
     const score = [match.teams.red.rounds_won, match.teams.blue.rounds_won]
 
     const date = new Date(match.metadata.game_start_patched);
+
+    date.setUTCHours(0);
+    date.setHours(date.getHours() - 3);
+
     const day = date.getDate();
     const month = date.getMonth();
     const str_date = `${day < 10 ? `0${day}` : day}/${month < 10 ? `0${month}` : month}/${date.getFullYear()}`

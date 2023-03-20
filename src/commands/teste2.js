@@ -24,12 +24,14 @@ async function teste2(client, msg, args) {
             return;
 
         const image = await ResultImage(match);
-        
-        const attachment = new AttachmentBuilder(image, { name: 'result.png' });
 
-        await channel.send({
-            files: [attachment]
-        })
+        if(image) {
+            const attachment = new AttachmentBuilder(image, { name: 'result.png' });
+
+            await channel.send({
+                files: [attachment]
+            })
+        }
     }
 }
 
