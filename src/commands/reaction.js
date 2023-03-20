@@ -16,7 +16,7 @@ async function reaction(client, reaction, user, add) {
         .then((msg) => {
             const author = msg.author;
 
-            if(author.id === '1083813927877627955')
+            if(author.id === client.user.id)
                 isBotMsg = true;
         });
 
