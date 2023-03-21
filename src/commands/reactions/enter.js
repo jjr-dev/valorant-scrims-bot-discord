@@ -17,7 +17,7 @@ async function enter(client, reaction, user, add) {
             user_id: user.id
         })
 
-        if(!player.link_elo) {
+        if(player.link_elo == null || player.link_elo == undefined) {
             RemoveReaction(reaction, user);
             return;
         }

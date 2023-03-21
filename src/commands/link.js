@@ -80,18 +80,12 @@ async function link(client, msg, args) {
 
         const mmr = obj.data;
 
-        let cmmr;
-        if(mmr.length > 1) 
-            cmmr = mmr[0].elo > mmr[1].elo ? mmr[0] : mmr[1];
-        else
-            cmmr = mmr[0]
-
         await PlayerModel.findOneAndUpdate({
             user_id: msg.author.id
         }, {
             link_id: account.puuid,
             link_region: account.region,
-            link_elo: cmmr.elo
+            link_elo: mmr.elo ? mmr.elo : 0
         }, {
             upsert: true
         });
@@ -117,12 +111,12 @@ async function link(client, msg, args) {
                 },
                 {
                     name: 'Elo',
-                    value: `${cmmr.currenttierpatched}`,
+                    value: `${mmr.elo ? mmr.currenttierpatched : "Sem elo"}`,
                     inline: true
                 }
             ])
             .setImage(account.card.wide)
-            .setThumbnail(cmmr.images.large)
+            .setThumbnail(mmr.elo ? mmr.images.large : account.card.small)
 
         m.edit({
             embeds: [embed2]

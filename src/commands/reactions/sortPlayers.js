@@ -61,28 +61,28 @@ async function sortPlayers(client, reaction, user, add) {
         }
     })
 
-    const players_win_rate = {};
+    const players_mmr = {};
     win_rates.map((player) => {
-        players_win_rate[player.user_id] = player.win_rate;
+        players_mmr[player.user_id] = player.win_rate * 100 + player.link_elo / 100;
     })
 
     players.map((player) => {
-        if(players_win_rate[player.user_id] === undefined)
-            players_win_rate[player.user_id] = 0.5;
+        if(players_mmr[player.user_id] === undefined)
+            players_mmr[player.user_id] = 50;
     })
 
     const limit = 15;
-    const range = 0;
+    const range = 5;
 
     let difference;
     let teams;
-    let teams_win_rate;
+    let teams_mmr;
     let blockeds;
 
     let best_sort = {
         difference: false,
         teams: {},
-        teams_win_rate: {}
+        teams_mmr: {}
     }
 
     let count = 0;
@@ -105,15 +105,15 @@ async function sortPlayers(client, reaction, user, add) {
             });
         })
     
-        teams_win_rate = {};
+        teams_mmr = {};
         teams_user_ids = {};
         for(let type in teams) {
             const team = teams[type];
     
-            teams_win_rate[type] = [];
+            teams_mmr[type] = [];
             teams_user_ids[type] = [];
             team.map((player) => {
-                teams_win_rate[type].push(players_win_rate[player.user_id]);
+                teams_mmr[type].push(players_mmr[player.user_id]);
                 teams_user_ids[type].push(player.user_id);
             })
         }
@@ -134,35 +134,34 @@ async function sortPlayers(client, reaction, user, add) {
             if(team_blockeds.length > 0)
                 blockeds.push(type);
         }
-        
     
-        for(let type in teams_win_rate) {
-            const team = teams_win_rate[type];
+        for(let type in teams_mmr) {
+            const team = teams_mmr[type];
     
             let total = 0;
             team.map((player) => {
                 total += player;
             })
     
-            teams_win_rate[type] = total / team.length;
+            teams_mmr[type] = total / team.length;
         }
     
-        difference = teams_win_rate['attacker'] - teams_win_rate['defender'];
+        difference = teams_mmr['attacker'] - teams_mmr['defender'];
         if(difference < 0)
             difference = difference * -1;
 
         count ++;
 
         if(best_sort.difference === false || difference < best_sort.difference) {
-            best_sort.teams          = teams;
-            best_sort.teams_win_rate = teams_win_rate;
-            best_sort.difference     = difference;
+            best_sort.teams      = teams;
+            best_sort.teams_mmr  = teams_mmr;
+            best_sort.difference = difference;
         }
     } while((difference > range || blockeds.length > 0) && count <= limit)
 
     if(count >= limit) {
         teams = best_sort.teams;
-        teams_win_rate = best_sort.teams_win_rate;
+        teams_mmr = best_sort.teams_mmr;
     }
 
     const sorts = await SortMatchModel.find({
@@ -202,7 +201,7 @@ async function sortPlayers(client, reaction, user, add) {
         };
 
         team.map((player, index) => {
-            const win_rate = players_win_rate[player.user_id];
+            const win_rate = players_mmr[player.user_id];
 
             teams[type][index]['sort_id']  = sort._id;
             teams[type][index]['captain']  = false;
@@ -227,13 +226,13 @@ async function sortPlayers(client, reaction, user, add) {
 
         mentions[key] = [];
         team.map((player) => {
-            mentions[key].push(`${userMention(player.user_id)} (${(player.win_rate * 100).toFixed(0)}%) ${player.captain ? "🎖️" : ""}`);
+            mentions[key].push(`${userMention(player.user_id)} (${(player.win_rate).toFixed(0)} mmr) ${player.captain ? "🎖️" : ""}`);
         })
     }
 
     const sidesNames = {
-        attacker: `Atacantes (${(teams_win_rate['attacker'] * 100).toFixed(0)}%)`,
-        defender: `Defensores (${(teams_win_rate['defender'] * 100).toFixed(0)}%)`
+        attacker: `Atacantes (${(teams_mmr['attacker']).toFixed(0)} mmr)`,
+        defender: `Defensores (${(teams_mmr['defender']).toFixed(0)} mmr)`
     }
 
     const embed2 = new EmbedBuilder()
