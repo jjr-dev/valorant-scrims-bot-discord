@@ -9,6 +9,7 @@ const BlockedPlayerModel = require('../../models/BlockedPlayer');
 
 const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
 const DeleteMessage = require('../../helpers/DeleteMessage');
+const RemoveReaction = require('../../helpers/RemoveReaction');
 
 async function sortPlayers(client, reaction, user, add) {
     if(!add)
@@ -28,6 +29,8 @@ async function sortPlayers(client, reaction, user, add) {
     const m = await channel.send({
         embeds: [embed1]
     });
+
+    RemoveReaction(reaction, user);
 
     const match = await MatchModel.findOne({
         message_id: reaction.message.id
@@ -262,6 +265,8 @@ async function sortPlayers(client, reaction, user, add) {
     });
 
     await m.react('▶️');
+    
+    RemoveReaction(reaction, user);
 }
 
 module.exports = sortPlayers;
