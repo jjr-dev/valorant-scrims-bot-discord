@@ -1,5 +1,8 @@
 const MatchModel = require('../../models/Match');
 const PlayerMatchModel = require('../../models/PlayerMatch');
+const PlayerModel = require('../../models/Player');
+
+const RemoveReaction = require('../../helpers/RemoveReaction');
 
 async function enter(client, reaction, user, add) {
     const match = await MatchModel.findOne({
@@ -10,6 +13,15 @@ async function enter(client, reaction, user, add) {
         return;
 
     if(add) {
+        const player = await PlayerModel.findOne({
+            user_id: user.id
+        })
+
+        if(!player.link_elo) {
+            RemoveReaction(reaction, user);
+            return;
+        }
+
         await PlayerMatchModel.create({
             user_id: user.id,
             match_id: match._id

@@ -108,7 +108,7 @@ class ValorantAPI {
 
     getMMR({ puuid, region, filter = false }) {
         return new Promise(async (resolve, reject) => {
-            let url = `${this.url.game}/v1/by-puuid/mmr/${region}/${puuid}`
+            let url = `${this.url.game}/v2/by-puuid/mmr-history/${region}/${puuid}`
 
             if(filter)
                 url += `?filter=${filter}`;

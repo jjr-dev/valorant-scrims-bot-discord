@@ -41,7 +41,8 @@ async function unlink(client, msg, args) {
         user_id: msg.author.id
     }, {
         link_id: null,
-        link_region: null
+        link_region: null,
+        link_elo: null
     });
 
     const embed2 = new EmbedBuilder()
