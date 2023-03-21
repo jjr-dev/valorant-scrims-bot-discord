@@ -69,7 +69,7 @@ async function sortPlayers(client, reaction, user, add) {
     })
 
     const limit = 15;
-    const range = 0.10;
+    const range = 0;
 
     let difference;
     let teams;
