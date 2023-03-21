@@ -5,6 +5,7 @@ const PlayerMatchModel = require('../../models/PlayerMatch');
 
 const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
 const DeleteMessage = require('../../helpers/DeleteMessage');
+const RemoveReaction = require('../../helpers/RemoveReaction');
 
 async function listPlayers(client, reaction, user, add) {
     if(!add)
@@ -24,6 +25,8 @@ async function listPlayers(client, reaction, user, add) {
     const m = await channel.send({
         embeds: [embed1]
     });
+
+    RemoveReaction(reaction, user);
 
     const match = await MatchModel.findOne({
         message_id: reaction.message.id

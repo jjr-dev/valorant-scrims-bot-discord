@@ -5,6 +5,7 @@ const MapSortMatchModel = require('../../models/MapSortMatch');
 
 const SortMap = require('../../helpers/SortMap');
 const DeleteMessage = require('../../helpers/DeleteMessage');
+const RemoveReaction = require('../../helpers/RemoveReaction');
 
 async function sortMap(client, reaction, user, add) {
     if(!add)
@@ -24,6 +25,8 @@ async function sortMap(client, reaction, user, add) {
     const m = await channel.send({
         embeds: [embed1]
     });
+
+    RemoveReaction(reaction, user);
 
     const match = await MatchModel.findOne({
         message_id: reaction.message.id
