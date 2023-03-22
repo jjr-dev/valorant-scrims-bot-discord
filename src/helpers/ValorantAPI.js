@@ -1,9 +1,17 @@
+const { apiKeyHDev } = require('../../configs.json')
+
 class ValorantAPI {
     constructor() {
         this.url = {
             game: "https://api.henrikdev.xyz/valorant",
             assets: "https://valorant-api.com"
         }
+
+        this.options = {
+            headers: {
+                Authorization: apiKeyHDev
+            }
+        };
     }
 
     getAccount({ name, tag, puuid, force = false }) {
@@ -20,7 +28,7 @@ class ValorantAPI {
             else
                 reject();
 
-            fetch(url)
+            fetch(url, this.options)
                 .then(async (res) => {
                     res = await res.json();
 
@@ -43,7 +51,7 @@ class ValorantAPI {
 
                 url += `?${strs.join('&')}`;
 
-                fetch(url)
+                fetch(url, this.options)
                     .then(async (res) => {
                         res = await res.json();
 
@@ -58,7 +66,7 @@ class ValorantAPI {
         return new Promise(async (resolve, reject) => {
             const url = `${this.url.game}/v2/match/${match_id}`
 
-            fetch(url)
+            fetch(url, this.options)
                 .then(async (res) => {
                     res = await res.json();
 
@@ -79,7 +87,7 @@ class ValorantAPI {
             if(querys.length > 0)
                 url += `?${querys.join('&')}`;
             
-            fetch(url)
+            fetch(url, this.options)
                 .then(async (res) => {
                     res = await res.json();
 
@@ -96,7 +104,7 @@ class ValorantAPI {
             if(language )
                 url += `?language=${language}`
             
-            fetch(url)
+            fetch(url, this.options)
                 .then(async (res) => {
                     res = await res.json();
 
