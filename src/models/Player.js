@@ -25,6 +25,9 @@ const Schema = mongoose.Schema({
     },
     link_region: {
         type: String
+    },
+    link_elo: {
+        type: Number
     }
 })
 

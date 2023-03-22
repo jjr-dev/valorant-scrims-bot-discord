@@ -50,15 +50,15 @@ class ValorantAPI {
                 }
 
                 url += `?${strs.join('&')}`;
-
-                fetch(url, this.options)
-                    .then(async (res) => {
-                        res = await res.json();
-
-                        resolve(res);
-                    })
-                    .catch((err) => reject(err))
             }
+
+            fetch(url, this.options)
+                .then(async (res) => {
+                    res = await res.json();
+
+                    resolve(res);
+                })
+                .catch((err) => reject(err))
         })
     }
 
@@ -104,6 +104,23 @@ class ValorantAPI {
             if(language )
                 url += `?language=${language}`
             
+            fetch(url, this.options)
+                .then(async (res) => {
+                    res = await res.json();
+
+                    resolve(res);
+                })
+                .catch((err) => reject(err))
+        })
+    }
+
+    getMMR({ puuid, region, filter = false }) {
+        return new Promise(async (resolve, reject) => {
+            let url = `${this.url.game}/v1/by-puuid/mmr/${region}/${puuid}`
+
+            if(filter)
+                url += `?filter=${filter}`;
+
             fetch(url, this.options)
                 .then(async (res) => {
                     res = await res.json();
