@@ -59,48 +59,37 @@ async function link(client, msg, args) {
     }
 
     try {
-        const obj = await VAPI.getAccount({
+        let obj = await VAPI.getAccount({
             name,
             tag,
             force: true
         })
 
-        if(obj.errors) {
-            if(obj.status != 404)
-                console.log(`Erro VAPI ${obj.status}`, obj.errors);
-
-            let error_msg;
-            if(obj.status == 404)
-                error_msg = "Usuário não encontrado";
-            else
-                error_msg = "Erro interno, tente novamente mais tarde";
-            
-            const embed2 = new EmbedBuilder()
-                .setColor("Random")
-                .setAuthor({
-                    name: client.user.username,
-                    iconURL: client.user.displayAvatarURL()
-                })
-                .setTitle('Conta não vinculada')
-                .setDescription(error_msg)
-
-            m.edit({
-                embeds: [embed2]
-            });
-            return;
-        }
+        if(obj.errors)
+            throw obj;
 
         const account = obj.data;
+
+        obj = await VAPI.getMMR({
+            puuid: account.puuid,
+            region: account.region
+        })
+
+        if(obj.errors)
+            throw obj;
+
+        const mmr = obj.data;
 
         await PlayerModel.findOneAndUpdate({
             user_id: msg.author.id
         }, {
             link_id: account.puuid,
-            link_region: account.region
+            link_region: account.region,
+            link_elo: mmr.elo ? mmr.elo : 0
         }, {
             upsert: true
         });
-
+        
         const embed2 = new EmbedBuilder()
             .setColor("Random")
             .setAuthor({
@@ -108,34 +97,52 @@ async function link(client, msg, args) {
                 iconURL: client.user.displayAvatarURL()
             })
             .setTitle('Conta vinculada')
-            .setDescription(`O membro ${msg.author} vinculou sua conta do **VALORANT** ${EmbedWhiteSpace()}`)
+            .setDescription(`O membro ${msg.author} vinculou sua conta ${EmbedWhiteSpace()}`)
             .addFields([
                 {
                     name: 'Usuário',
-                    value: `${account.name}`,
-                    inline: true
-                },
-                {
-                    name: 'TAG',
-                    value: `#${account.tag}`,
+                    value: `${account.name}#${account.tag}`,
                     inline: true
                 },
                 {
                     name: 'Nível',
                     value: `${account.account_level}`,
                     inline: true
+                },
+                {
+                    name: 'Elo',
+                    value: `${mmr.elo ? mmr.currenttierpatched : "Sem elo"}`,
+                    inline: true
                 }
             ])
-            .setThumbnail(account.card.small)
             .setImage(account.card.wide)
+            .setThumbnail(mmr.elo ? mmr.images.large : account.card.small)
 
         m.edit({
             embeds: [embed2]
         });
     } catch(err) {
-        console.log("Erro VAPI", err);
+        if(err.status != 404)
+            console.log(`Erro VAPI ${err.status}`, err.errors);
 
-        DeleteMessage(m);
+        let error_msg;
+        if(err.status == 404)
+            error_msg = "Usuário não encontrado";
+        else
+            error_msg = "Erro interno, tente novamente mais tarde";
+        
+        const embed2 = new EmbedBuilder()
+            .setColor("Random")
+            .setAuthor({
+                name: client.user.username,
+                iconURL: client.user.displayAvatarURL()
+            })
+            .setTitle('Conta não vinculada')
+            .setDescription(error_msg)
+
+        m.edit({
+            embeds: [embed2]
+        });
     }
     
 }
