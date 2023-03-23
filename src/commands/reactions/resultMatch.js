@@ -195,8 +195,13 @@ async function resultMatch(attacker, client, reaction, user, add) {
                 match_id: match._id
             });
 
-            if(matches[0].metadata.map.toLowerCase() == map.name.toLowerCase()) {
-                const image = await ResultImage(matches[0]);
+            if(matches.length == 0)
+                return;
+
+            const m = matches[0];
+
+            if(!map || m.metadata.map.toLowerCase() == map.name.toLowerCase()) {
+                const image = await ResultImage(m);
 
                 if(image) {
                     const attachment = new AttachmentBuilder(image, { name: `match-result-${match._id}.png` });
