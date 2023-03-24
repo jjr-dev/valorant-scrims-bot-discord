@@ -80,6 +80,42 @@ async function link(client, msg, args) {
 
         const mmr = obj.data;
 
+        let tier_translated;
+        let tier_division;
+        if(mmr.elo) {
+            const tiers = {
+                iron: "Ferro",
+                bronze: "Bronze",
+                silver: "Prata",
+                gold: "Ouro",
+                platinum: "Platina",
+                diamond: "Diamante",
+                ascendant: "Ascendente",
+                immortal: "Imortal",
+                radiant: "Radiante"
+            }
+
+            const tier = mmr.currenttierpatched;
+
+            let split = tier.split(' ');
+            tier_translated = tiers[split[0].toLowerCase()];
+            tier_division   = split[1];
+
+            const guild = msg.guild;
+
+            let role = guild.roles.cache.find((r) => r.name === tier_translated);
+
+            if(!role)
+                role = await guild.roles.create({
+                    name: tier_translated
+                })
+
+            const member = await guild.members.cache.get(msg.author.id);
+
+            if(member)
+                await member.roles.add(role.id);
+        }
+
         await PlayerModel.findOneAndUpdate({
             user_id: msg.author.id
         }, {
@@ -111,7 +147,7 @@ async function link(client, msg, args) {
                 },
                 {
                     name: 'Elo',
-                    value: `${mmr.elo ? mmr.currenttierpatched : "Sem elo"}`,
+                    value: `${mmr.elo ? `${tier_translated} ${tier_division}` : "Sem elo"}`,
                     inline: true
                 }
             ])
