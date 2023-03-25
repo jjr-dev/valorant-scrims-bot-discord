@@ -6,7 +6,7 @@ const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
 const DeleteMessage = require('../helpers/DeleteMessage');
 
 async function players(client, msg, args) {
-    let [ page, configs ] = args;
+    let [ page, ...configs ] = args;
 
     const embed1 = new EmbedBuilder()
         .setColor("Random")
@@ -21,31 +21,12 @@ async function players(client, msg, args) {
         embeds: [embed1]
     });
 
-    let order = 'desc';
-    let limit = 10;
-    
-    if(configs) {
-        configs = configs.split(';');
-
-        let org = {};
-        configs.forEach((item) => {
-            const split = item.split(':');
-            
-            org[split[0]] = split[1] === 'true' ? true : (split[1] === 'false' ? false : split[1]);
-        })
-
-        configs = org;
-
-        if(configs.order)
-            order = configs.order;
-
-        if(configs.limit)
-            limit = configs.limit <= 10 ? configs.limit : 10;
-    }
+    const order = configs.includes("--asc") ? 'asc' : 'desc';
+    const limit = 10;
 
     if(!page) page = 1;
     
-    if(isNaN(page) || isNaN(limit) || (order != 'desc' && order != 'asc')) {
+    if(isNaN(page)) {
         DeleteMessage(m);
         return;
     }
@@ -56,10 +37,7 @@ async function players(client, msg, args) {
 
     const list = [];
     players.forEach((player) => {
-        if(configs && configs.id) 
-            list.push(`${userMention(player.user_id)} | \`${player.user_id}\``)
-        else
-            list.push(`${userMention(player.user_id)} | Partidas: ${player.matches_won}/${player.matches} • WR: ${(player.win_rate * 100).toFixed(0)}%`)
+        list.push(`${userMention(player.user_id)} | ${configs.includes("--id") ? `\`${player.user_id}\`` : `Partidas: ${player.matches_won}/${player.matches} • WR: ${(player.win_rate * 100).toFixed(0)}%`}`)
     })
 
     if(players.length == 0) {
