@@ -73,6 +73,10 @@ async function help(client, msg, args) {
                 value: `${prefix}sortmap`,
             },
             {
+                name: "Ranking de mapa",
+                value: `${prefix}ranking \`map*\``
+            },
+            {
                 name: "Ver comandos",
                 value: `${prefix}help`,
             },
