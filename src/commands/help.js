@@ -61,6 +61,10 @@ async function help(client, msg, args) {
                 value: `${prefix}link \`name#tag\``,
             },
             {
+                name: "Atualizar conta vinculada",
+                value: `${prefix}update`
+            },
+            {
                 name: "Desvincular conta",
                 value: `${prefix}unlink`,
             },
