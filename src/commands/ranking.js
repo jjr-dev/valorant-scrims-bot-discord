@@ -145,9 +145,8 @@ async function ranking(client, msg, args) {
             embeds: [embed2]
         })
     } else {
-        console.log("Ranking geral");
+        DeleteMessage(m);
     }
-
 }
 
 module.exports = ranking;
