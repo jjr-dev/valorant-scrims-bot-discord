@@ -30,6 +30,8 @@ async function ranking(client, msg, args) {
         map = map.toLowerCase()
         map = map.charAt(0).toUpperCase() + map.slice(1);
 
+        let count = 0;
+
         const matchs = await MapSortMatchModel.find({
             name: map
         }).limit(50);
@@ -56,6 +58,8 @@ async function ranking(client, msg, args) {
             })
 
             if(result) {
+                count ++;
+
                 const obj = {
                     match_id: match.match_id,
                     players: {
@@ -68,8 +72,7 @@ async function ranking(client, msg, args) {
                     obj.players[player.attacker === result.attacker ? 'w' : 'l'].push(player);
                 }
     
-                if(result)
-                    ms.push(obj)
+                ms.push(obj)
             }
         }
 
@@ -130,7 +133,7 @@ async function ranking(client, msg, args) {
                 iconURL: client.user.displayAvatarURL()
             })
             .setTitle(`Ranking **${map}**`)
-            .setDescription(`Lista de melhores jogadores do mapa`)
+            .setDescription(`Melhores jogadores do mapa \`(${count} partidas)\``)
             .addFields(
                 {
                     name: "Lista",
