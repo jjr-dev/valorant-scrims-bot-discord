@@ -1,38 +1,42 @@
-const { AttachmentBuilder } = require('discord.js');
+const { userMention } = require('discord.js');
 
-const VAPI = require('../helpers/ValorantAPI');
-
-const ResultImage = require("../helpers/ResultImage");
+const BlockedPlayerModel = require('../models/BlockedPlayer');
 
 async function teste2(client, msg, args) {
-    const [ match_id ] = args;
+    const blockeds = await BlockedPlayerModel.find();
 
-    if(!match_id) {
-        return;
-    }
+    const players = {
+        blockers: {},
+        blockeds: {}
+    };
+    blockeds.map((player) => {
+        if(!players.blockeds[player.blocked_id])
+            players.blockeds[player.blocked_id] = 0;
 
-    const channel = await client.channels.cache.get("1087450850114424873");
+        players.blockeds[player.blocked_id] ++;
 
-    const res = await VAPI.getMatch({
-        match_id
-    });
+        if(!players.blockers[player.user_id])
+            players.blockers[player.user_id] = 0;
 
-    if(res) {
-        const match = res.data;
+        players.blockers[player.user_id] ++;
+    })
 
-        if(!match)
-            return;
+    const mentions = {
+        blockeds: [],
+        blockers: []
+    };
+    for(let type in players) {
+        const ps = players[type];
+        for(let id in ps) {
+            const blockeds = ps[id];
 
-        const image = await ResultImage(match);
-
-        if(image) {
-            const attachment = new AttachmentBuilder(image, { name: 'result.png' });
-
-            await channel.send({
-                files: [attachment]
-            })
+            mentions[type].push(`${userMention(id)} - ${type == 'blockers' ? "Bloqueou" : "Bloqueado por"} \`${blockeds}\` jogadores`);
         }
     }
+
+    console.log(mentions);
+
+    await msg.channel.send(`Bloqueados:\n${mentions.blockeds.join("\n")} \n\n Bloqueadores:\n${mentions.blockers.join("\n")}`);
 }
 
 module.exports = teste2;
