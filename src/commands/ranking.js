@@ -7,8 +7,7 @@ const SortMatchModel = require('../models/SortMatch');
 
 const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
 const DeleteMessage = require('../helpers/DeleteMessage');
-
-const elosList = require('../jsons/elos.json');
+const MemberElo = require('../helpers/MemberElo');
 
 async function ranking(client, msg, args) {
     let [map] = args;
@@ -119,13 +118,6 @@ async function ranking(client, msg, args) {
             return a.wr > b.wr ? -1 : 1;
         })
 
-        const emojis = {};
-        const elos   = [];
-
-        for(let prop in elosList) {
-            elos.push(elosList[prop]);
-        }
-
         const members = await msg.guild.members.fetch();
 
         const limit = 10;
@@ -134,20 +126,13 @@ async function ranking(client, msg, args) {
             if(index < limit) {
                 const player = org[index];
 
-                const member = members.find(member => member.user.id == player.id);
-
-                let elo, emoji;
-                if(member) {
-                    elo = await member.roles.cache.find(role => elos.includes(role.name));
-                    elo = elo ? elo.name : false;
-
-                    if(elo) {
-                        emoji = await msg.guild.emojis.cache.find(emoji => emoji.name === `elo_${elo.toLowerCase()}`);
-                        emoji = emoji ? emoji : false;
-                    }
-                }
+                const elo = await MemberElo({
+                    guild: msg.guild,
+                    user: player.id,
+                    members
+                });
                 
-                ranking.push(`${parseInt(index) + 1}º - ${userMention(player.id)} | ${(player.wr * 100).toFixed(0)}% \`(${player.w}/${player.t})\` ${elo ? (emoji ? emoji : `\`${elo}\``) : ""}`)
+                ranking.push(`${parseInt(index) + 1}º - ${userMention(player.id)} | ${(player.wr * 100).toFixed(0)}% \`(${player.w}/${player.t})\` ${elo.string}`)
             }
         }
 

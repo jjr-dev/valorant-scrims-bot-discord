@@ -10,6 +10,7 @@ const BlockedPlayerModel = require('../../models/BlockedPlayer');
 const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
 const DeleteMessage = require('../../helpers/DeleteMessage');
 const RemoveReaction = require('../../helpers/RemoveReaction');
+const MemberElo = require('../../helpers/MemberElo');
 
 async function sortPlayers(client, reaction, user, add) {
     if(!add)
@@ -218,6 +219,9 @@ async function sortPlayers(client, reaction, user, add) {
         teams[type][max.index]['captain'] = true;
     }
 
+    const guild   = reaction.message.guild;
+    const members = await guild.members.fetch();
+
     let mentions = {};
     for(let key in teams) {
         const team = teams[key];
@@ -225,9 +229,18 @@ async function sortPlayers(client, reaction, user, add) {
         await PlayerSortMatchModel.create(team);
 
         mentions[key] = [];
-        team.map((player) => {
-            mentions[key].push(`${userMention(player.user_id)} (${(player.win_rate).toFixed(0)} mmr) ${player.captain ? "🎖️" : ""}`);
-        })
+        for(let prop in team) {
+            const player = team[prop];
+
+            const elo = await MemberElo({
+                user: player.user_id,
+                guild,
+                members
+            });
+
+            mentions[key].push(`${userMention(player.user_id)} (${(player.win_rate).toFixed(0)} mmr) ${player.captain ? "🎖️" : ""} ${elo.emoji ? elo.emoji : ''}`);
+
+        }
     }
 
     const sidesNames = {

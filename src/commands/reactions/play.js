@@ -8,6 +8,7 @@ const MapSortMatchModel = require('../../models/MapSortMatch');
 
 const EmbedWhiteSpace = require('../../helpers/EmbedWhiteSpace');
 const DeleteMessage = require('../../helpers/DeleteMessage');
+const MemberElo = require('../../helpers/MemberElo');
 
 async function play(client, reaction, user, add) {
     if(!add)
@@ -122,6 +123,8 @@ async function play(client, reaction, user, add) {
     DeleteMessage(reaction.message);
     DeleteMessage(match.message_id, reaction.message.channel);
 
+    const members = await guild.members.fetch();
+    
     let mentions = {};
     for(let key in teams) {
         const team = teams[key];
@@ -129,9 +132,17 @@ async function play(client, reaction, user, add) {
         await PlayerSortMatchModel.create(team);
 
         mentions[key] = [];
-        team.map((player) => {
-            mentions[key].push(`${userMention(player.user_id)} ${player.captain ? "🎖️" : ""}`);
-        })
+        for(let prop in team) {
+            const player = team[prop];
+
+            const elo = await MemberElo({
+                user: player.user_id,
+                guild,
+                members
+            });
+
+            mentions[key].push(`${userMention(player.user_id)} ${player.captain ? "🎖️" : ""} ${elo.emoji ? elo.emoji : ''}`);
+        }
     }
 
     await MatchModel.findOneAndUpdate({
