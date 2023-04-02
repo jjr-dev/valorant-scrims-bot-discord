@@ -34,20 +34,20 @@ function LinkAccount({ name, tag, puuid, msg, guild = false, user = false }) {
                 original: null
             }
     
+            if(!guild && msg)
+                guild = msg.guild;
+
+            if(!user && msg)
+                user = msg.author.id
+
+            const member = await guild.members.fetch(user);
+
             if(mmr.elo) {
                 tier.original = mmr.currenttierpatched;
     
                 let split = tier.original.split(' ');
                 tier.translated = tiersList[split[0].toLowerCase()];
                 tier.division   = split[1];
-
-                if(!guild && msg)
-                    guild = msg.guild;
-
-                if(!user && msg)
-                    user = msg.author.id
-
-                const member = await guild.members.fetch(user);
 
                 if(member) {
                     for(let prop in tiersList) {
@@ -69,6 +69,11 @@ function LinkAccount({ name, tag, puuid, msg, guild = false, user = false }) {
                     await member.roles.add(role.id);
                 }
             }
+
+            member.setNickname(account.name)
+                .catch((err) => {
+                    console.log("Set nickname error", err);
+                })
 
             await PlayerModel.findOneAndUpdate({
                 user_id: user
