@@ -1,7 +1,9 @@
 const VAPI = require('../helpers/ValorantAPI');
 const PlayerModel = require('../models/Player');
 
-function LinkAccount({ name, tag, puuid, msg }) {
+const tiersList = require('../jsons/tiersList.json')
+
+function LinkAccount({ name, tag, puuid, msg, guild = false, user = false }) {
     return new Promise(async (resolve, reject) => {
         try {
             let obj = await VAPI.getAccount({
@@ -33,54 +35,48 @@ function LinkAccount({ name, tag, puuid, msg }) {
             }
     
             if(mmr.elo) {
-                const tiers = {
-                    iron: "Ferro",
-                    bronze: "Bronze",
-                    silver: "Prata",
-                    gold: "Ouro",
-                    platinum: "Platina",
-                    diamond: "Diamante",
-                    ascendant: "Ascendente",
-                    immortal: "Imortal",
-                    radiant: "Radiante"
-                }
-    
                 tier.original = mmr.currenttierpatched;
     
                 let split = tier.original.split(' ');
-                tier.translated = tiers[split[0].toLowerCase()];
+                tier.translated = tiersList[split[0].toLowerCase()];
                 tier.division   = split[1];
 
-                const guild = msg.guild;
+                if(!guild && msg)
+                    guild = msg.guild;
+
+                if(!user && msg)
+                    user = msg.author.id
+
+                const member = await guild.members.fetch(user);
+
+                if(member) {
+                    for(let prop in tiersList) {
+                        const tier = tiersList[prop];
     
-                const member = await guild.members.cache.get(msg.author.id);
-
-                for(let prop in tiers) {
-                    const tier = tiers[prop];
-
-                    const role = guild.roles.cache.find((r) => r.name === tier);
-
-                    if(role)
-                        await member.roles.remove(role.id);
-                }
-
-                let role = guild.roles.cache.find((r) => r.name === tier.translated);
+                        const role = guild.roles.cache.find((r) => r.name === tier);
     
-                if(!role)
-                    role = await guild.roles.create({
-                        name: tier.translated
-                    })
+                        if(role)
+                            await member.roles.remove(role.id);
+                    }
     
-                if(member)
+                    let role = guild.roles.cache.find((r) => r.name === tier.translated);
+        
+                    if(!role)
+                        role = await guild.roles.create({
+                            name: tier.translated
+                        })
+        
                     await member.roles.add(role.id);
+                }
             }
-    
+
             await PlayerModel.findOneAndUpdate({
-                user_id: msg.author.id
+                user_id: user
             }, {
                 link_id: account.puuid,
                 link_region: account.region,
-                link_elo: mmr.elo ? mmr.elo : 0
+                link_elo: mmr.elo ? mmr.elo : 0,
+                link_date: Date.now()
             }, {
                 upsert: true
             });

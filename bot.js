@@ -72,4 +72,7 @@ client.on(Events.VoiceStateUpdate, async (oldChannel, newCannel) => {
 const database = require('./db');
 database();
 
+const cronjobs = require('./cronjobs');
+cronjobs(client);
+
 client.login(token);

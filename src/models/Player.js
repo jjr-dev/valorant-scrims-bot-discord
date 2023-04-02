@@ -28,6 +28,9 @@ const Schema = mongoose.Schema({
     },
     link_elo: {
         type: Number
+    },
+    link_date: {
+        type: Date
     }
 })
 

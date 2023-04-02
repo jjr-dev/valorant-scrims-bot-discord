@@ -1,4 +1,4 @@
-const elosList = require('../jsons/elos.json');
+const tiersList = require('../jsons/tiersList.json');
 
 function MemberElo({ user, emoji = true, members = false, guild }) {
     return new Promise(async (resolve, reject) => {
@@ -6,10 +6,9 @@ function MemberElo({ user, emoji = true, members = false, guild }) {
             if(!members && guild)
                 members = await guild.members.fetch(user);
 
-            const elos   = [];
-
-            for(let prop in elosList) {
-                elos.push(elosList[prop]);
+            const tiers   = [];
+            for(let prop in tiersList) {
+                tiers.push(tiersList[prop]);
             }
 
             const member = members.find(member => member.user.id == user);
@@ -19,7 +18,7 @@ function MemberElo({ user, emoji = true, members = false, guild }) {
 
             let name;
             if(member) {
-                const elo = await member.roles.cache.find(role => elos.includes(role.name));
+                const elo = await member.roles.cache.find(role => tiers.includes(role.name));
                 name = elo ? elo.name : false;
 
                 if(elo && emoji) {
