@@ -4,6 +4,7 @@ const PlayerModel = require('../models/Player');
 
 const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
 const DeleteMessage = require('../helpers/DeleteMessage');
+const MemberElo = require('../helpers/MemberElo');
 
 async function players(client, msg, args) {
     let [ page, ...configs ] = args;
@@ -35,14 +36,24 @@ async function players(client, msg, args) {
 
     const players = await PlayerModel.find().limit(limit).skip(skip).sort({win_rate: order});
 
-    const list = [];
-    players.forEach((player) => {
-        list.push(`${userMention(player.user_id)} | ${configs.includes("--id") ? `\`${player.user_id}\`` : `Partidas: ${player.matches_won}/${player.matches} • WR: ${(player.win_rate * 100).toFixed(0)}%`}`)
-    })
+    const members = await msg.guild.members.fetch();
 
     if(players.length == 0) {
         DeleteMessage(m);
         return;
+    }
+
+    const list = [];
+    for(let prop in players) {
+        const player = players[prop];
+
+        const elo = await MemberElo({
+            guild: msg.guild,
+            user: player.user_id,
+            members
+        });
+
+        list.push(`${userMention(player.user_id)} | ${configs.includes("--id") ? `\`${player.user_id}\`` : `Partidas: ${player.matches_won}/${player.matches} • WR: ${(player.win_rate * 100).toFixed(0)}%`} ${elo.string}`)
     }
 
     const embed2 = new EmbedBuilder()

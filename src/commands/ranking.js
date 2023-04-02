@@ -7,6 +7,7 @@ const SortMatchModel = require('../models/SortMatch');
 
 const EmbedWhiteSpace = require('../helpers/EmbedWhiteSpace');
 const DeleteMessage = require('../helpers/DeleteMessage');
+const MemberElo = require('../helpers/MemberElo');
 
 async function ranking(client, msg, args) {
     let [map] = args;
@@ -117,12 +118,21 @@ async function ranking(client, msg, args) {
             return a.wr > b.wr ? -1 : 1;
         })
 
+        const members = await msg.guild.members.fetch();
+
         const limit = 10;
         const ranking = [];
         for(let index in org) {
             if(index < limit) {
                 const player = org[index];
-                ranking.push(`${parseInt(index) + 1}º - ${userMention(player.id)} | ${(player.wr * 100).toFixed(0)}% \`(${player.w}/${player.t})\``)
+
+                const elo = await MemberElo({
+                    guild: msg.guild,
+                    user: player.id,
+                    members
+                });
+                
+                ranking.push(`${parseInt(index) + 1}º - ${userMention(player.id)} | ${(player.wr * 100).toFixed(0)}% \`(${player.w}/${player.t})\` ${elo.string}`)
             }
         }
 

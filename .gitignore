@@ -1,4 +1,5 @@
 node_modules
 configs.json
+package-lock.json
 discloud.config
 .vscode
