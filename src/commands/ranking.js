@@ -126,13 +126,15 @@ async function ranking(client, msg, args) {
             elos.push(elosList[prop]);
         }
 
+        const members = await msg.guild.members.fetch();
+
         const limit = 10;
         const ranking = [];
         for(let index in org) {
             if(index < limit) {
                 const player = org[index];
 
-                const member = await msg.guild.members.fetch(player.id);
+                const member = members.find(member => member.user.id == player.id);
 
                 let elo, emoji;
                 if(member) {
