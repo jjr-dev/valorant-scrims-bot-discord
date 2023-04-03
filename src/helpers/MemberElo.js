@@ -3,15 +3,18 @@ const tiersList = require('../jsons/tiersList.json');
 function MemberElo({ user, emoji = true, members = false, guild }) {
     return new Promise(async (resolve, reject) => {
         try {
+            let member;
+            
             if(!members && guild)
-                members = await guild.members.fetch(user);
+                member = await guild.members.fetch(user);
+            else
+                member = members.find(member => member.user.id == user);
 
             const tiers   = [];
             for(let prop in tiersList) {
                 tiers.push(tiersList[prop]);
             }
 
-            const member = members.find(member => member.user.id == user);
 
             if(!member)
                 resolve(false);

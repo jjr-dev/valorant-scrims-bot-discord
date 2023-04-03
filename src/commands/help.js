@@ -37,6 +37,10 @@ async function help(client, msg, args) {
                 value: `${prefix}matches \`user_mention\``,
             },
             {
+                name: "Ver dados de jogador",
+                value: `${prefix}player \`user_mention\``,
+            },
+            {
                 name: "Ver lista de jogadores",
                 value: `${prefix}players \`page\` \`configs\``,
             },
