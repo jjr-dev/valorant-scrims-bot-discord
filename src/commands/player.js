@@ -1,5 +1,8 @@
 const { EmbedBuilder, userMention } = require('discord.js');
 
+const PlayerSortMatchModel = require('../models/PlayerSortMatch');
+const VoteResultMatchModel = require('../models/VoteResultMatch');
+const SortMatchModel = require('../models/SortMatch');
 const PlayerModel = require('../models/Player');
 
 const VAPI = require('../helpers/ValorantAPI');
@@ -8,7 +11,7 @@ const DeleteMessage = require('../helpers/DeleteMessage');
 const MemberElo = require('../helpers/MemberElo');
 
 async function player(client, msg, args) {
-    const [ user ] = args;
+    const [ user, ...configs ] = args;
 
     const embed1 = new EmbedBuilder()
         .setColor("Random")
@@ -30,7 +33,7 @@ async function player(client, msg, args) {
     });
 
     let account;
-    if(player && player.link_id) {
+    if(player && player.link_id && !configs.includes('--fast')) {
         let obj = await VAPI.getAccount({
             puuid: player.link_id,
             force: true
@@ -38,6 +41,51 @@ async function player(client, msg, args) {
 
         if(!obj.errors)
             account = obj.data;
+    }
+
+    let history = [];
+    if(player && !configs.includes('--fast')) {
+        const sorts = await PlayerSortMatchModel.find({
+            user_id: player.user_id
+        }).limit(15);
+
+        const matches = [];
+        for(let prop in sorts) {
+            const sort = sorts[prop];
+
+            const match = await SortMatchModel.findOne({
+                _id: sort.sort_id
+            });
+
+            if(match) {
+                matches.push({
+                    id: match.match_id,
+                    sort: sort._id,
+                    attacker: sort.attacker
+                });
+            }
+        }
+
+        const results = [];
+        for(let prop in matches) {
+            const match = matches[prop];
+
+            const result = await VoteResultMatchModel.findOne({
+                match_id: match.id
+            })
+
+            if(result)
+                results.push(result.attacker == match.attacker)
+        }
+
+        for(let prop in results) {
+            if(prop >= 10)
+                break;
+
+            const result = results[prop];
+
+            history.push(result ? "🟩" : "🟥");
+        }
     }
 
     const elo = player ? await MemberElo({
@@ -77,14 +125,20 @@ async function player(client, msg, args) {
                 inline: true
             },
             {
-                name: 'MMR',
+                name: "MMR",
                 value: `${(player.win_rate * 100 + player.link_elo / 100).toFixed(0)}`,
                 inline: true
             }
-        ])
+        ]);
 
     if(account)
         embed2.setImage(account.card.wide)
+
+    if(history.length > 0)
+        embed2.addFields({
+            name: "Histórico",
+            value: history.join(' ')
+        })
 
     m.edit({
         embeds: [embed2]
