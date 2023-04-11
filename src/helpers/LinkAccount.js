@@ -40,41 +40,6 @@ function LinkAccount({ name, tag, puuid, msg, guild = false, user = false }) {
             if(!user && msg)
                 user = msg.author.id
 
-            const member = await guild.members.fetch(user);
-
-            if(mmr.elo) {
-                tier.original = mmr.currenttierpatched;
-    
-                let split = tier.original.split(' ');
-                tier.translated = tiersList[split[0].toLowerCase()];
-                tier.division   = split[1];
-
-                if(member) {
-                    for(let prop in tiersList) {
-                        const tier = tiersList[prop];
-    
-                        const role = guild.roles.cache.find((r) => r.name === tier);
-    
-                        if(role)
-                            await member.roles.remove(role.id);
-                    }
-    
-                    let role = guild.roles.cache.find((r) => r.name === tier.translated);
-        
-                    if(!role)
-                        role = await guild.roles.create({
-                            name: tier.translated
-                        })
-        
-                    await member.roles.add(role.id);
-                }
-            }
-
-            member.setNickname(account.name)
-                .catch((err) => {
-                    console.log("Set nickname error", err);
-                })
-
             await PlayerModel.findOneAndUpdate({
                 user_id: user
             }, {
@@ -85,6 +50,45 @@ function LinkAccount({ name, tag, puuid, msg, guild = false, user = false }) {
             }, {
                 upsert: true
             });
+
+            guild.members.fetch(user)
+                .then(async (member) => {
+                    if(mmr.elo) {
+                        tier.original = mmr.currenttierpatched;
+            
+                        let split = tier.original.split(' ');
+                        tier.translated = tiersList[split[0].toLowerCase()];
+                        tier.division   = split[1];
+        
+                        for(let prop in tiersList) {
+                            const tier = tiersList[prop];
+        
+                            const role = await guild.roles.cache.find((r) => r.name === tier);
+        
+                            if(role)
+                                await member.roles.remove(role.id);
+                        }
+        
+                        let role = guild.roles.cache.find((r) => r.name === tier.translated);
+            
+                        if(!role)
+                            role = await guild.roles.create({
+                                name: tier.translated
+                            })
+            
+                        await member.roles.add(role.id);
+
+                        console.log(`Role updated: ${account.name}`);
+                    }
+        
+                    member.setNickname(account.name)
+                        .then(() => {
+                            console.log(`Nickname set: ${account.name}`);
+                        })
+                        .catch((err) => {
+                            console.log("Set nickname error", err);
+                        })
+                });
     
             resolve({ account, mmr, tier });
         } catch(err) {
