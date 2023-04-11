@@ -16,7 +16,7 @@ async function AutoUpdateLinkAccount(client) {
         player = pwd;
     } else {
         const t = new Date();
-        t.setDate(t.getDate() - 1);
+        t.setHours(t.getHours() - 24);
 
         player = await PlayerModel.findOne({
             link_id: { $ne: null },
