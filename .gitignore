@@ -3,3 +3,4 @@ configs.json
 package-lock.json
 discloud.config
 .vscode
+.eslintrc.json

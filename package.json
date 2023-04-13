@@ -1,22 +1,29 @@
 {
-  "name": "nodejs",
+  "name": "valorant-scrims-2",
   "version": "1.0.0",
   "description": "",
-  "main": "bot.js",
+  "main": "index.js",
   "scripts": {
-    "test": "nodemon test.js",
-    "start": "nodemon bot.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjr-dev/valorant-scrims-bot-discord.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jjr-dev/valorant-scrims-bot-discord/issues"
+  },
+  "homepage": "https://github.com/jjr-dev/valorant-scrims-bot-discord#readme",
   "dependencies": {
-    "canvas": "^2.11.0",
-    "discord.js": "^14.7.1",
-    "g": "^2.0.1",
-    "mongoose": "^7.0.1",
-    "node-cron": "^3.0.2",
-    "nodemon": "^2.0.21",
-    "npm": "^9.4.0"
+    "discord.js": "^14.9.0",
+    "mongoose": "^7.0.3",
+    "nodemon": "^2.0.22"
+  },
+  "devDependencies": {
+    "eslint": "^8.38.0"
   }
 }
