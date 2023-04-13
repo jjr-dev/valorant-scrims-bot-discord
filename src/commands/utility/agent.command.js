@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+
 const AutoCompleteHelper = require('../../helpers/autocomplete.helper');
 const ValorantHelper = require('../../helpers/valorant.helper')
 const EmbedBuilderHelper = require('../../helpers/embedbuilder.helper')
@@ -55,14 +56,16 @@ module.exports = {
         });
 
         if(obj.error) {
-            // Erro
+            await interaction.editReply(`Erro interno, tente novamente mais tarde`);
+            return;
         }
 
         const agents = obj.data;
         const agent = agents.find(agent => agent.displayName.toLowerCase() == name.toLowerCase());
 
         if(!agent) {
-            // Erro
+            await interaction.editReply(`Agente \`${name}\` não encontrado`);
+            return;
         }
 
         const slots = {
@@ -111,8 +114,8 @@ module.exports = {
                 }
             ])
 
-            await interaction.editReply({
-                embeds: [embed]
-            });
+        await interaction.editReply({
+            embeds: [embed]
+        });
     }
 }

@@ -1,5 +1,6 @@
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./configs.json');
+const db = require('./db');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -20,3 +21,4 @@ for(const event of events()) {
 // Set cooldowns
 client.login(token);
 
+db.connect();
