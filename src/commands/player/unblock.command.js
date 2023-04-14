@@ -9,6 +9,7 @@ module.exports = {
         .addMentionableOption(option => 
             option.setName('jogador')
                 .setDescription('Jogador que deseja desbloquear')
+                .setRequired(true)
         ),
     async execute(interaction) {
         await interaction.deferReply({

@@ -10,6 +10,7 @@ module.exports = {
         .addMentionableOption(option => 
             option.setName('jogador')
                 .setDescription('Jogador que deseja bloquear')
+                .setRequired(true)
         ),
     async execute(interaction) {
         await interaction.deferReply({
