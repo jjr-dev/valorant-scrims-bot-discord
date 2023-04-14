@@ -1,4 +1,4 @@
-const { SlashCommandBuilder  } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 
 const BlockedPlayerModel = require('../../models/blockedplayer.model');
 
@@ -20,6 +20,11 @@ module.exports = {
 
         if(!member) {
             await interaction.editReply(`Membro ${member} não encontrado`);
+            return;
+        }
+
+        if(!member.user) {
+            await interaction.editReply(`Cite um membro do servidor para desbloquear`);
             return;
         }
 

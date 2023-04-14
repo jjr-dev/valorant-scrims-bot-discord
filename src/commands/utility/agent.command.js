@@ -55,7 +55,7 @@ module.exports = {
             playable: true
         });
 
-        if(obj.error) {
+        if(obj.status !== 200) {
             await interaction.editReply(`Erro interno, tente novamente mais tarde`);
             return;
         }

@@ -18,7 +18,7 @@ module.exports = () => {
             if('data' in command && 'execute' in command) {
                 commands.push(command);
             } else {
-                console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property`);
+                console.log(`[AVISO] O comando ${filePath} não possui a propriedade "data" ou "execute"`);
             }
         }
     }

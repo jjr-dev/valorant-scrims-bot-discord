@@ -8,7 +8,7 @@ module.exports = {
         const command = interaction.client.commands.get(interaction.commandName);
     
         if(!command) {
-            console.log(`[ERROR] No command matching ${interaction.commandName} was found`);
+            console.log(`[ERRO] Comando ${interaction.commandName} não encontrado`);
             return;
         }
 
@@ -22,12 +22,12 @@ module.exports = {
     
             if(interaction.replied || interaction.deferred) {
                 await interaction.followUp({
-                    content: "There was an error while executing this command!",
+                    content: "Ocorreu um erro ao executar este comando",
                     ephemeral: true
                 });
             } else {
                 await interaction.reply({
-                    content: "There was an error while executing this command!",
+                    content: "Ocorreu um erro ao executar este comando",
                     ephemeral: true
                 });
             }

@@ -13,7 +13,7 @@ const rest = new REST().setToken(token);
 
 (async () => {
     try {
-        console.log(`Started refreshing ${commandsData.length} application (/) commands`);
+        console.log(`Iniciando atualização de ${commandsData.length} comandos`);
 
         const data = await rest.put(
             Routes.applicationGuildCommands(clientId, guildId),
@@ -22,7 +22,7 @@ const rest = new REST().setToken(token);
             }
         );
 
-        console.log(`Successfully reloaded ${data.length} application (/) commands`);
+        console.log(`${data.length} comandos atualizados com sucesso`);
     } catch (err) {
         console.log(err);
     }

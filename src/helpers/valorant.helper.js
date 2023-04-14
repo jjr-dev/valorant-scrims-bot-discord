@@ -11,6 +11,47 @@ this.options = {
     }
 };
 
+exports.getAccount = ({ username, tag, puuid, force = false }) => {
+    return new Promise(async (resolve, reject) => {
+        if(typeof force !== "boolean")
+            reject();
+
+        let url = `${this.url.game}/v1`;
+
+        if(username && tag)
+            url += `/account/${username}/${tag}?force=${force}`;
+        else if(puuid)
+            url += `/by-puuid/account/${puuid}?force=${force}`;
+        else
+            reject();
+
+        fetch(url, this.options)
+            .then(async (res) => {
+                res = await res.json();
+
+                resolve(res);
+            })
+            .catch((err) => reject(err))
+    })
+}
+
+exports.getMMR = ({ puuid, region, filter = false }) => {
+    return new Promise(async (resolve, reject) => {
+        let url = `${this.url.game}/v1/by-puuid/mmr/${region}/${puuid}`
+
+        if(filter)
+            url += `?filter=${filter}`;
+
+        fetch(url, this.options)
+            .then(async (res) => {
+                res = await res.json();
+
+                resolve(res);
+            })
+            .catch((err) => reject(err))
+    })
+}
+
 exports.getAgents = ({ language = false, playable = true }) => {
     return new Promise(async (resolve, reject) => {
         let url = `${this.url.assets}/v1/agents`
