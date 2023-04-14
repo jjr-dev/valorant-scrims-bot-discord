@@ -18,7 +18,14 @@ for(const event of events()) {
     client[event.once ? 'once' : 'on'](event.name, (...args) => event.execute(...args))
 }
 
-// Set cooldowns
+// Set buttons
+client.buttons = new Collection();
+
+const buttons = require('./src/helpers/findbuttons.helper');
+for(const button of buttons()) {
+    client.buttons.set(button.data.name, button);
+}
+
 client.login(token);
 
 db.connect();

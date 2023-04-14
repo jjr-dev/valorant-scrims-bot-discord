@@ -121,7 +121,7 @@ module.exports = {
         
         const embed = EmbedBuilderHelper(client)
             .setTitle('Conta vinculada')
-            .addFields([
+            .addFields(
                 {
                     name: 'Usuário',
                     value: `${account.name}#${account.tag}`,
@@ -137,7 +137,7 @@ module.exports = {
                     value: `${mmr.elo ? `${tier.name} ${tier.division}` : "Sem elo"}`,
                     inline: true
                 }
-            ])
+            )
             .setImage(account.card.wide)
             .setThumbnail(mmr.elo ? mmr.images.large : account.card.small)
 

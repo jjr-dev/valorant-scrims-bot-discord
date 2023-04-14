@@ -3,20 +3,26 @@ const { Events } = require('discord.js');
 module.exports = {
     name: Events.InteractionCreate,
     async execute(interaction) {
-        if(!interaction.isChatInputCommand() && !interaction.isAutocomplete()) return;
-        
         const command = interaction.client.commands.get(interaction.commandName);
-    
-        if(!command) {
+        const button  = interaction.client.buttons.get(interaction.customId);
+
+        if((interaction.isChatInputCommand() || interaction.isAutocomplete()) && !command) {
             console.log(`[ERRO] Comando ${interaction.commandName} não encontrado`);
             return;
         }
 
+        if(interaction.isButton() && !button) {
+            console.log(`[ERRO] Botão ${interaction.customId} não encontrado`);
+            return;
+        }
+        
         try {
             if(interaction.isChatInputCommand())
                 await command.execute(interaction);
             else if(interaction.isAutocomplete())
-                await command.autocomplete(interaction)
+                await command.autocomplete(interaction);
+            else if(interaction.isButton())
+                await button.execute(interaction);
         } catch(err) {
             console.log(err);
     

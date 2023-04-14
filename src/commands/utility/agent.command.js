@@ -102,7 +102,7 @@ module.exports = {
             .setTitle(agent.displayName)
             .setDescription(agent.description)
             .setThumbnail(agent.displayIcon)
-            .addFields([
+            .addFields(
                 {
                     name: "Função",
                     value: `${emoji} ${agent.role.displayName}`
@@ -112,7 +112,7 @@ module.exports = {
                     name: "Vídeos e dicas:",
                     value: `https://blitz.gg/valorant/agents/${agent.displayName.toLowerCase()}`
                 }
-            ])
+            )
 
         await interaction.editReply({
             embeds: [embed]

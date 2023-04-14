@@ -8,6 +8,9 @@ const Schema = mongoose.Schema({
     match_id: {
         type: String,
         required: true
+    },
+    message_id: {
+        type: String
     }
 })
 

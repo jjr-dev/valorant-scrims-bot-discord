@@ -33,8 +33,6 @@ module.exports = {
                 value: `/${command.name} ${optionList.join(" ")}`
             })
         }
-
-        console.log(commandList);
         
         const client = interaction.client;
 

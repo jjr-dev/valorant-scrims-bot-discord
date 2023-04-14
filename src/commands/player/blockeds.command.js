@@ -6,7 +6,7 @@ const EmbedBuilderHelper = require('../../helpers/embedbuilder.helper')
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("bloqueados")
-        .setDescription("Listar jogadores bloqueados"),
+        .setDescription("Listar jogadores(as) bloqueados(as)"),
     async execute(interaction) {
         await interaction.deferReply({
             ephemeral: true
@@ -29,7 +29,7 @@ module.exports = {
         const client = interaction.client;
         
         const embed = EmbedBuilderHelper(client)
-            .setTitle('Jogadores bloqueados')
+            .setTitle('Jogadores(as) bloqueados(as)')
             .addFields({
                 name: "Lista:",
                 value: mentions.join("\n")
