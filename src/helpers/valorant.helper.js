@@ -72,3 +72,23 @@ exports.getAgents = ({ language = false, playable = true }) => {
             .catch((err) => reject(err))
     })
 }
+
+exports.getMaps = ({ language = false }) => {
+    return new Promise(async (resolve, reject) => {
+        let url = `${this.url.assets}/v1/maps`
+
+        const querys = [];
+        if(language) querys.push(`language=${language}`);
+
+        if(querys.length > 0)
+            url += `?${querys.join('&')}`;
+        
+        fetch(url, this.options)
+            .then(async (res) => {
+                res = await res.json();
+
+                resolve(res);
+            })
+            .catch((err) => reject(err))
+    })
+}

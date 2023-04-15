@@ -24,8 +24,6 @@ module.exports = {
             else if(interaction.isButton())
                 await button.execute(interaction);
         } catch(err) {
-            console.log(err);
-    
             if(interaction.replied || interaction.deferred) {
                 await interaction.followUp({
                     content: "Ocorreu um erro ao executar este comando",

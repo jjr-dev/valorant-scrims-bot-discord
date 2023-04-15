@@ -37,12 +37,12 @@ module.exports = {
             .setStyle(ButtonStyle.Secondary)
 
         const map = new ButtonBuilder()
-            .setCustomId('match-map')
+            .setCustomId('match-sortmap')
             .setLabel('Sortear mapa')
             .setStyle(ButtonStyle.Primary)
 
         const sort = new ButtonBuilder()
-            .setCustomId('match-sort')
+            .setCustomId('match-sortteams')
             .setLabel('Sortear times')
             .setStyle(ButtonStyle.Danger)
 
